@@ -9,6 +9,7 @@ Player::Player()
     stop = false;
     option = 'a';
     frame = -1;
+    isVideo = false;
 }
 
 Player::~Player(){
@@ -28,6 +29,7 @@ void Player::setOption(char option){
 
 void Player::displayVideo(){
     stop = false;
+    isVideo = true;
     video.set(CAP_PROP_POS_FRAMES,1);
     int fps = video.get(CAP_PROP_FPS);
     int delay = 1000 / fps;
@@ -48,23 +50,27 @@ void Player::displayVideo(){
        if (waitKey(delay) >= 0 || stop)
            break;
     }
+    isVideo = false;
 }
 
 
 void Player::displayImg(){
     Mat result = doOptionWork();
-    cvtColor(result,result,COLOR_BGR2RGB);
-    const uchar *qImageBuffer = (const uchar*)result.data;
+    Mat final;
+    cvtColor(result,final,COLOR_BGR2RGB);
+    const uchar *qImageBuffer = (const uchar*)final.data;
     // Create QImage with same dimensions as input Mat
-    QImage image(qImageBuffer, result.cols, result.rows, result.step, QImage::Format_RGB888);
+    QImage image(qImageBuffer, final.cols, final.rows, final.step, QImage::Format_RGB888);
     label->setPixmap(QPixmap::fromImage(image));
     label->setScaledContents(true);
 }
 
 void Player::setImage(Mat img){
     this->img = img;
-    img.copyTo(original);
-    isVideo = false;
+    if(isVideo)
+        img.copyTo(original);
+    else if(!isVideo && original.empty())
+        img.copyTo(original);
 }
 
 void Player::setVideo(VideoCapture video){
@@ -98,9 +104,10 @@ Mat Player::doOptionWork(){
         case 'd': return grayAndHistogram();
         case 'e': return gaussianBlurFilters();
         case 'f': return segmentation();
-        case '3': return ex3();
+        case '3': return bgr2yuv444();
         case 'g': return morphologyTransformations();
         case 'h': return gradients();
+        case 'i': return canny();
         case 'o': Mat image; original.copyTo(image); img = image; return image;
     }
     return img;
@@ -108,7 +115,6 @@ Mat Player::doOptionWork(){
 
 Mat Player::waterMark(String filepaht, String text){
     Mat logo = imread(filepaht);
-  //  Mat image = getImg();
     Mat imageROI = img(cv::Rect(10,10,logo.cols,logo.rows));
     logo.copyTo(imageROI);
     putText(img, text, Point(20, img.rows - 50), FONT_HERSHEY_COMPLEX,1, Scalar(102, 20, 0), 2);
@@ -173,6 +179,7 @@ Mat Player::colorHistogram(){
               Scalar( 0, 0, 255), 2, 8, 0  );
     }
 
+    namedWindow("calcHist Demo", WINDOW_NORMAL);
     imshow("calcHist Demo", histImage );
     return img;
 }
@@ -240,28 +247,31 @@ void Player::setThresholdValue(int value){
 }
 
 //yuv420
-Mat Player::ex3(){
-    Mat result(img.rows*3/2, img.cols, CV_8UC1);
-    Mat u_array(img.rows/4, img.cols, CV_8UC1);
-    Mat v_array(img.rows/4, img.cols, CV_8UC1);
+Mat Player::bgr2yuv420(){
+    int rows = img.rows;
+    int cols = img.cols;
 
-    int u_row = 0;
+    Mat result(rows * 3 / 2, cols, CV_8UC1);
+    Mat u_array(rows / 4, cols, CV_8UC1);
+    Mat v_array(rows / 4, cols, CV_8UC1);
+
+    int u_row = rows;     // u pertence ao intervalo [img.rows, img.rows*1.25[
     int u_col = 0;
-    int v_row = 0;
+    int v_row = rows * 5 / 4;  // v pertence ao intervalo [img.rows*1.25, img.rows*1.5[
     int v_col = 0;
 
-    for(int i = 0; i < img.rows; i++)
+    for(int i = 0; i < rows; i++)
     {
-        if(u_col == img.cols){
+        if(u_col == cols){
             u_row++;
             u_col = 0;
         }
-        if(v_col == img.cols){
+        if(v_col == cols){
              v_row++;
              v_col = 0;
         }
 
-        for(int j = 0; j < img.cols; j++)
+        for(int j = 0; j < cols; j++)
         {
               unsigned char B = img.ptr<Vec3b>(i)[j][0];
               unsigned char G = img.ptr<Vec3b>(i)[j][1];
@@ -273,32 +283,245 @@ Mat Player::ex3(){
 
               result.ptr<uchar>(i)[j] = Y;
               if(i%2==0&&j%2 ==0){
-                   u_array.ptr<uchar>(u_row)[u_col++] = U;
+                   result.ptr<uchar>(u_row)[u_col++] = U;
               }else{
                   if(j%2==0){
-                   v_array.ptr<uchar>(v_row)[v_col++] = V;
+                   result.ptr<uchar>(v_row)[v_col++] = V;
                   }
               }
         }
     }
+    setImage(result);
+    return result;
+}
 
-    //preencher os U's no resultado
-    for (int i = 0, k = img.rows; i < img.rows/4 && k < img.rows*3/2; i++,k++){
-        for (int j = 0; j < img.cols; j++){
-            result.ptr<uchar>(k)[j] = u_array.ptr<uchar>(i)[j];
+Mat Player::bgr2yuv444(){
+    int rows = img.rows;
+    int cols = img.cols;
+
+    Mat y_array(rows, cols, CV_8UC1);
+    Mat u_array(rows, cols, CV_8UC1);
+    Mat v_array(rows, cols, CV_8UC1);
+
+    for (int i = 0; i < rows; i++){
+        for (int j = 0; j < cols; j++){
+            unsigned char B = img.ptr<Vec3b>(i)[j][0];
+            unsigned char G = img.ptr<Vec3b>(i)[j][1];
+            unsigned char R = img.ptr<Vec3b>(i)[j][2];
+
+            unsigned char Y = 0.299 * R + 0.587 * G + 0.114 * B;
+            unsigned char U = 128 - 0.168736 * R - 0.331264 * G + 0.5 * B;
+            unsigned char V = 128 + 0.5 * R - 0.418688 * G - 0.081312 * B;
+
+            y_array.ptr<uchar>(i)[j] = Y;
+            u_array.ptr<uchar>(i)[j] = U;
+            v_array.ptr<uchar>(i)[j] = V;
         }
     }
+    Mat result;
+    vector<Mat> channels{y_array, u_array, v_array};
+    merge(channels, result);
+    setImage(result);
 
-    //preencher os V's no resultado
-    for (int i = 0, k = img.rows*3/4; i < img.rows/4 && k < img.rows*3/2; i++,k++){
-        for (int j = 0; j < img.cols; j++){
-            result.ptr<uchar>(k)[j] = v_array.ptr<uchar>(i)[j];
-        }
-    }
+    namedWindow("bgr", WINDOW_NORMAL);
+    imshow("bgr", yuv444ToBgr());
 
     return result;
 }
 
+Mat Player::bgr2yuv422(){
+    int rows = img.rows;
+    int cols = img.cols;
+
+    Mat result(rows * 2, cols, CV_8UC1);
+    Mat u_array(rows / 2, cols, CV_8UC1);
+    Mat v_array(rows / 2, cols, CV_8UC1);
+
+    int u_row = rows;
+    int u_col = 0;
+    int v_row = rows * 3 / 2;
+    int v_col = 0;
+
+    for(int i = 0; i < rows; i++)
+    {
+        if(u_col == cols){
+            u_row++;
+            u_col = 0;
+        }
+        if(v_col == cols){
+             v_row++;
+             v_col = 0;
+        }
+
+        for(int j = 0; j < cols; j++)
+        {
+              unsigned char B = img.ptr<Vec3b>(i)[j][0];
+              unsigned char G = img.ptr<Vec3b>(i)[j][1];
+              unsigned char R = img.ptr<Vec3b>(i)[j][2];
+
+              unsigned char Y = 0.299 * R + 0.587 * G + 0.114 * B;
+              unsigned char U = 128 - 0.168736 * R - 0.331264 * G + 0.5 * B;
+              unsigned char V = 128 + 0.5 * R - 0.418688 * G - 0.081312 * B;
+
+              result.ptr<uchar>(i)[j] = Y;
+              if(j%2 ==0){
+                   result.ptr<uchar>(u_row)[u_col++] = U;
+                   result.ptr<uchar>(v_row)[v_col++] = V;
+              }
+        }
+    }
+    setImage(result);
+    return result;
+}
+
+Mat Player::yuv420ToBgr(){
+    int rows = img.rows;
+    int cols = img.cols;
+
+    int u_row = rows * 2 / 3;
+    int v_row = u_row * 5 / 4;
+
+    int u_cols = 0;
+    int v_cols = 0;
+
+    Mat b_array(u_row, cols, CV_8UC1);
+    Mat g_array(u_row, cols, CV_8UC1);
+    Mat r_array(u_row, cols, CV_8UC1);
+
+    for (int i = 0; i < u_row; i+=2){
+
+        if(u_cols == cols){
+            u_row++;
+            u_cols = 0;
+        }
+        if(v_cols == cols){
+            v_row++;
+            v_cols = 0;
+        }
+        unsigned  char Y1;
+        unsigned char Y2;
+        unsigned char U;
+        unsigned char V;
+        for (int j = 0; j < cols; j++){
+
+            Y1 = img.ptr<uchar>(i)[j];
+            Y2 = img.ptr<uchar>(i + 1)[j];
+
+            if(v_row == rows) break;
+
+            if(j%2 == 0){
+                U = img.ptr<uchar>(u_row)[u_cols++];
+                V = img.ptr<uchar>(v_row)[v_cols++];
+            }
+
+            unsigned char B1 = Y1 + 4.06298 * pow(10, -7) * V + 1.772 * U - 226.816;
+            unsigned char G1 = Y1 - 0.714136 * V - 0.344136 * U + 135.459;
+            unsigned char R1 = Y1 + 1.402 * V - 121.889 * pow(10, -6) * U - 179.456;
+
+            unsigned char B2 = Y2 + 4.06298 * pow(10, -7) * V + 1.772 * U - 226.816;
+            unsigned char G2 = Y2 - 0.714136 * V - 0.344136 * U + 135.459;
+            unsigned char R2 = Y2 + 1.402 * V - 121.889 * pow(10, -6) * U - 179.456;
+
+            b_array.ptr<uchar>(i)[j] = B1;
+            g_array.ptr<uchar>(i)[j] = G1;
+            r_array.ptr<uchar>(i)[j] = R1;
+
+            b_array.ptr<uchar>(i + 1)[j] = B2;
+            g_array.ptr<uchar>(i + 1)[j] = G2;
+            r_array.ptr<uchar>(i + 1)[j] = R2;
+        }
+
+    }
+    Mat result;
+    vector<Mat> channels{b_array, g_array, r_array};
+    merge(channels, result);
+    setImage(result);
+    return result;
+}
+
+Mat Player::yuv422ToBgr(){
+
+    int rows = img.rows;
+    int cols = img.cols;
+
+    Mat b_array(rows * 2 / 3, cols, CV_8UC1);
+    Mat g_array(rows * 2 / 3, cols, CV_8UC1);
+    Mat r_array(rows * 2 / 3, cols, CV_8UC1);
+
+    int u_row = rows * 2 / 3;
+    int u_col = 0;
+    int v_row = rows * 1 / 6;
+    int v_col = 0;
+    unsigned char Y;
+    unsigned char U;
+    unsigned char V;
+    for (int i = 0; i < rows * 2 / 3; i++)
+    {
+        if (u_col == cols) {
+            u_row++;
+            u_col = 0;
+        }
+        if (v_col == cols) {
+            v_row++;
+            v_col = 0;
+        }
+
+        for (int j = 0; j < cols; j++)
+        {
+            Y = img.ptr<uchar>(i)[j];
+            if (i % 2 == 0 && j % 2 == 0) {
+                U = img.ptr<uchar>(u_row)[u_col++];
+                V = img.ptr<uchar>(v_row)[v_col++];
+            }
+            unsigned char B = Y + 4.06298 * pow(10, -7) * V + 1.772 * U - 226.816;
+            unsigned char G = Y - 0.714136 * V - 0.344136 * U + 135.459;
+            unsigned char R = Y + 1.402 * V - 121.889 * pow(10, -6) * U - 179.456;
+
+            b_array.ptr<uchar>(i)[j] = B;
+            g_array.ptr<uchar>(i)[j] = G;
+            r_array.ptr<uchar>(i)[j] = R;
+        }
+    }
+    vector<Mat> channels{ b_array, g_array, r_array };
+    Mat result;
+    // Create the output matrix
+    merge(channels, result);
+    setImage(result);
+    return result;
+}
+
+/**
+ * @brief Player::yuv444ToBgr converter yuv444 para bgr
+ * @return
+ */
+Mat Player::yuv444ToBgr(){
+    int rows = img.rows;
+    int cols = img.cols;
+    Mat result(rows, cols, CV_8UC3);
+    unsigned char Y;;
+    unsigned char U;
+    unsigned char V;
+
+    for (int i = 0; i < rows; i++)
+    {
+        for (int j = 0; j < cols; j++)
+        {
+            Y = img.ptr<Vec3b>(i)[j][0];
+            U = img.ptr<Vec3b>(i)[j][1];
+            V = img.ptr<Vec3b>(i)[j][2];
+
+            unsigned char B = Y + 4.06298 * pow(10, -7) * V + 1.772 * U - 226.816;
+            unsigned char G = Y - 0.714136 * V - 0.344136 * U + 135.459;
+            unsigned char R = Y + 1.402 * V - 121.889 * pow(10, -6) * U - 179.456;
+
+            result.ptr<Vec3b>(i)[j][0] = B;
+            result.ptr<Vec3b>(i)[j][1] = G;
+            result.ptr<Vec3b>(i)[j][2] = R;
+        }
+    }
+    setImage(result);
+    return result;
+}
 
 Mat Player::morphologyTransformations(){
     int operation = morph_operator + 2;
@@ -337,5 +560,26 @@ Mat Player::gradients(){
 
     addWeighted(abs_grad_x, 0.5, abs_grad_y, 0.5, 0, grad);
     return grad;
+}
+
+
+Mat Player::canny(){
+    int lowThreshold = 0;
+    int max_lowThreshold = 100;
+    int ratio = 3;
+    int kernel_size = 3;
+
+    Mat dst, img_gray, detected_edges;
+    dst.create(img.size(), img.type());
+
+    cvtColor(img, img_gray, COLOR_BGR2GRAY);
+
+    blur( img_gray, detected_edges, Size(3,3) );
+
+    Canny( detected_edges, detected_edges, lowThreshold, lowThreshold*ratio, kernel_size );
+
+    dst = Scalar::all(0);
+    img.copyTo(dst, detected_edges);
+    return dst;
 }
 

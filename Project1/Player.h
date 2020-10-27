@@ -48,9 +48,15 @@ class Player: public QObject{
         void setFrame(int frame);
         void setThresholdType(int type);
         void setThresholdValue(int value);
-        Mat ex3();
+        Mat bgr2yuv420();
+        Mat bgr2yuv444();
+        Mat bgr2yuv422();
+        Mat yuv420ToBgr();
+        Mat yuv422ToBgr();
+        Mat yuv444ToBgr();
         Mat morphologyTransformations();
         Mat gradients();
+        Mat canny();
     signals:
         void changeResource();
 }
