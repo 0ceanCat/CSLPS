@@ -8,46 +8,75 @@
 using namespace cv;
 using namespace std;
 
-class MyThread;
 class Player: public QObject{
     Q_OBJECT
-    friend MyThread;
-    private:
-        Mat img;
-        Mat original;
-        VideoCapture video;
-        bool isVideo;
-        char option;
-        QLabel* label;
-        int frame; // index of frame
-        int threshold_type;
-        int threshold_value;
-        int morph_operator;
-        int morph_size;
     public:
+        Mat img;        //image
+        Mat original;   //original image
+        VideoCapture video;
+        bool isVideo;   //if the current resource is video
+        int option;
+        QLabel* label;  //where the video/image will be showed
+        int frameIndex;      //index of the current frame
+        int thresholdType;
+        int thresholdValue;
+        int morphOperator;
+        int morphSize;
+        int morphelem;
+        int colorSpace;
+        int kernelWidth;
+        int kernelHeight;
+        int gradient;
+        int ksize;
+        int scale;
+        int delta;
+        int lowThreshold = 0;
+        int maxLowthreshold = 100;
+        int ratio = 3;
+        int cannyKsize = 3;
+        int conversion;
+        String watermarkPicPath;
+        Mat watermarkPic;
+        String watermarkText;
         Player();
         ~Player();
         void setLabel(QLabel *label);
-        void setOption(char option);
+        void setOption(int option);
         void setImage(Mat img);
         void setVideo(VideoCapture video);
+        void setWaterMarkText(String text);
+        void setWaterMarkPicPath(String path);
+        void setColorSpace(int colorSpace);
+        void setKernelWidth(int w);
+        void setKernelHeight(int h);
+        void setMorphOperator(int mp);
+        void setMorphSize(int ms);
+        void setMorhElem(int me);
+        void setKsize(int ksize);
+        void setScale(int scale);
+        void setDelta(int delta);
+        void setLowThreshold(int lt);
+        void setRatio(int r);
+        void setCannyKsize(int ck);
         void displayVideo();
         void displayImg();
+        void setGradient(int g);
+        void setConversion(int c);
         bool getIsVideo();
+        int getOption();
+        void setThresholdType(int type);
+        void setThresholdValue(int value);
         VideoCapture getVideo();
         Mat getImg();
         bool stop;
-        Mat waterMark(String filepath="C:/Users/Predator/Desktop/logo.png", String text="Complementos Sobre Linguagens de Programacao");
+        Mat waterMark();
         Mat doOptionWork();
         Mat changeSpaceAndshowChannels();
         Mat colorHistogram();
         Mat grayAndHistogram();
         Mat gaussianBlurFilters();
         Mat segmentation();
-        char getOption();
-        void setFrame(int frame);
-        void setThresholdType(int type);
-        void setThresholdValue(int value);
+        Mat myConverter();
         Mat bgr2yuv420();
         Mat bgr2yuv444();
         Mat bgr2yuv422();

@@ -23,9 +23,9 @@
    <widget class="QComboBox" name="optionBox">
     <property name="geometry">
      <rect>
-      <x>20</x>
+      <x>10</x>
       <y>60</y>
-      <width>107</width>
+      <width>221</width>
       <height>30</height>
      </rect>
     </property>
@@ -42,62 +42,62 @@
     </property>
     <item>
      <property name="text">
-      <string>original</string>
+      <string>Original</string>
      </property>
     </item>
     <item>
      <property name="text">
-      <string>a</string>
+      <string>A-Watermark</string>
      </property>
     </item>
     <item>
      <property name="text">
-      <string>b</string>
+      <string>B-YUV/HSV</string>
      </property>
     </item>
     <item>
      <property name="text">
-      <string>c</string>
+      <string>C-Color Histograms</string>
      </property>
     </item>
     <item>
      <property name="text">
-      <string>d</string>
+      <string>D-GrayScale&amp;Equalization</string>
      </property>
     </item>
     <item>
      <property name="text">
-      <string>e</string>
+      <string>E-GaussianBlur</string>
      </property>
     </item>
     <item>
      <property name="text">
-      <string>f</string>
+      <string>F-Threshold</string>
      </property>
     </item>
     <item>
      <property name="text">
-      <string>g</string>
+      <string>G-Morphological Operators</string>
      </property>
     </item>
     <item>
      <property name="text">
-      <string>h</string>
+      <string>Gradients</string>
      </property>
     </item>
     <item>
      <property name="text">
-      <string>i</string>
+      <string>Canny</string>
      </property>
     </item>
     <item>
      <property name="text">
-      <string>3</string>
+      <string>Converter</string>
      </property>
     </item>
     <item>
      <property name="text">
-      <string>新建项目</string>
+      <string/>
      </property>
     </item>
     <item>
@@ -106,10 +106,10 @@
      </property>
     </item>
    </widget>
-   <widget class="QPushButton" name="open_image">
+   <widget class="QPushButton" name="openImage">
     <property name="geometry">
      <rect>
-      <x>20</x>
+      <x>10</x>
       <y>10</y>
       <width>121</width>
       <height>28</height>
@@ -127,8 +127,8 @@
    <widget class="QLabel" name="playzone">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>100</y>
+      <x>20</x>
+      <y>120</y>
       <width>1121</width>
       <height>601</height>
      </rect>
@@ -143,9 +143,9 @@
    <widget class="QLabel" name="fileNameLabel">
     <property name="geometry">
      <rect>
-      <x>160</x>
+      <x>150</x>
       <y>10</y>
-      <width>331</width>
+      <width>371</width>
       <height>31</height>
      </rect>
     </property>
@@ -170,6 +170,11 @@
       <height>28</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
     <property name="text">
      <string>Replay</string>
     </property>
@@ -183,8 +188,13 @@
       <height>28</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
     <property name="text">
-     <string>Pause</string>
+     <string>Stop</string>
     </property>
    </widget>
    <widget class="QSlider" name="slider">
@@ -206,10 +216,10 @@
      <enum>Qt::Horizontal</enum>
     </property>
    </widget>
-   <widget class="QComboBox" name="threshold_type">
+   <widget class="QComboBox" name="thresholdType">
     <property name="geometry">
      <rect>
-      <x>300</x>
+      <x>390</x>
       <y>60</y>
       <width>231</width>
       <height>31</height>
@@ -246,10 +256,10 @@
      </property>
     </item>
    </widget>
-   <widget class="QLabel" name="threshold_type_label">
+   <widget class="QLabel" name="thresholdTypeLabel">
     <property name="geometry">
      <rect>
-      <x>160</x>
+      <x>240</x>
       <y>60</y>
       <width>141</width>
       <height>31</height>
@@ -264,12 +274,12 @@
      <string>Threshold Type:</string>
     </property>
    </widget>
-   <widget class="QSpinBox" name="threshold_value">
+   <widget class="QSpinBox" name="thresholdValue">
     <property name="geometry">
      <rect>
-      <x>740</x>
-      <y>61</y>
-      <width>81</width>
+      <x>790</x>
+      <y>60</y>
+      <width>181</width>
       <height>31</height>
      </rect>
     </property>
@@ -282,10 +292,10 @@
      <number>255</number>
     </property>
    </widget>
-   <widget class="QLabel" name="thread_value_label">
+   <widget class="QLabel" name="thresholdValueLabel">
     <property name="geometry">
      <rect>
-      <x>590</x>
+      <x>640</x>
       <y>70</y>
       <width>141</width>
       <height>16</height>
@@ -298,6 +308,670 @@
     </property>
     <property name="text">
      <string>Threshold Value:</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="selectWatermark">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>110</y>
+      <width>151</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Select a picture</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="pictureName">
+    <property name="geometry">
+     <rect>
+      <x>180</x>
+      <y>110</y>
+      <width>221</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(255, 255, 255);</string>
+    </property>
+    <property name="text">
+     <string>picture name</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="textLabel">
+    <property name="geometry">
+     <rect>
+      <x>440</x>
+      <y>110</y>
+      <width>101</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Text:</string>
+    </property>
+   </widget>
+   <widget class="QTextEdit" name="watermarkText">
+    <property name="geometry">
+     <rect>
+      <x>750</x>
+      <y>60</y>
+      <width>271</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="colorSpace">
+    <property name="geometry">
+     <rect>
+      <x>170</x>
+      <y>160</y>
+      <width>131</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+    <item>
+     <property name="text">
+      <string>YUV</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>HSV</string>
+     </property>
+    </item>
+   </widget>
+   <widget class="QLabel" name="colorSpaceLabel">
+    <property name="geometry">
+     <rect>
+      <x>50</x>
+      <y>170</y>
+      <width>91</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>ColorSpace:</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="kernelWidthLabel">
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>220</y>
+      <width>101</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Kernel Width:</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="kernelHeightLabel">
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>266</y>
+      <width>101</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Kernel Height:</string>
+    </property>
+   </widget>
+   <widget class="QSpinBox" name="kernelWidth">
+    <property name="geometry">
+     <rect>
+      <x>170</x>
+      <y>220</y>
+      <width>81</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+    <property name="minimum">
+     <number>1</number>
+    </property>
+    <property name="singleStep">
+     <number>2</number>
+    </property>
+   </widget>
+   <widget class="QSpinBox" name="kernelHeight">
+    <property name="geometry">
+     <rect>
+      <x>170</x>
+      <y>260</y>
+      <width>81</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+    <property name="minimum">
+     <number>1</number>
+    </property>
+    <property name="singleStep">
+     <number>2</number>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="operator_2">
+    <property name="geometry">
+     <rect>
+      <x>170</x>
+      <y>320</y>
+      <width>131</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+    <item>
+     <property name="text">
+      <string>Opening</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Closing </string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Gradient</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Top Hat</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Black Hat</string>
+     </property>
+    </item>
+   </widget>
+   <widget class="QLabel" name="operatorLabel">
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>320</y>
+      <width>91</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Operator:</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="elementLabel">
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>380</y>
+      <width>81</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Element:</string>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="element">
+    <property name="geometry">
+     <rect>
+      <x>140</x>
+      <y>370</y>
+      <width>131</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+    <item>
+     <property name="text">
+      <string>Rect</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Cross</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Ellipse</string>
+     </property>
+    </item>
+   </widget>
+   <widget class="QLabel" name="kernelSizeLbel">
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>450</y>
+      <width>101</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Kernel Size:</string>
+    </property>
+   </widget>
+   <widget class="QSpinBox" name="kernelSize">
+    <property name="geometry">
+     <rect>
+      <x>150</x>
+      <y>440</y>
+      <width>81</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+   </widget>
+   <widget class="QLabel" name="scaleLabel">
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>496</y>
+      <width>55</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Scale:</string>
+    </property>
+   </widget>
+   <widget class="QSpinBox" name="scale">
+    <property name="geometry">
+     <rect>
+      <x>150</x>
+      <y>490</y>
+      <width>81</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+   </widget>
+   <widget class="QLabel" name="deltalabel">
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>540</y>
+      <width>61</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Delta:</string>
+    </property>
+   </widget>
+   <widget class="QSpinBox" name="delta">
+    <property name="geometry">
+     <rect>
+      <x>150</x>
+      <y>540</y>
+      <width>81</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+   </widget>
+   <widget class="QLabel" name="kernelSizeLabel2">
+    <property name="geometry">
+     <rect>
+      <x>330</x>
+      <y>450</y>
+      <width>101</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Kernel Size:</string>
+    </property>
+   </widget>
+   <widget class="QSpinBox" name="kernelSize_2">
+    <property name="geometry">
+     <rect>
+      <x>430</x>
+      <y>440</y>
+      <width>81</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+    <property name="minimum">
+     <number>1</number>
+    </property>
+    <property name="maximum">
+     <number>30</number>
+    </property>
+    <property name="singleStep">
+     <number>2</number>
+    </property>
+   </widget>
+   <widget class="QLabel" name="gradientLabel">
+    <property name="geometry">
+     <rect>
+      <x>340</x>
+      <y>510</y>
+      <width>71</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Gradient:</string>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="gradient">
+    <property name="geometry">
+     <rect>
+      <x>420</x>
+      <y>500</y>
+      <width>111</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+    <item>
+     <property name="text">
+      <string>Sobel</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Scharr</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Laplacian</string>
+     </property>
+    </item>
+   </widget>
+   <widget class="QLabel" name="lowThresholdLabel">
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>620</y>
+      <width>111</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>LowThreshold:</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="ratioLabel">
+    <property name="geometry">
+     <rect>
+      <x>340</x>
+      <y>620</y>
+      <width>61</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Ratio:</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="cannyKsizeLabel">
+    <property name="geometry">
+     <rect>
+      <x>560</x>
+      <y>620</y>
+      <width>101</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Kernel Size:</string>
+    </property>
+   </widget>
+   <widget class="QSpinBox" name="lowThreshold">
+    <property name="geometry">
+     <rect>
+      <x>160</x>
+      <y>620</y>
+      <width>81</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+    <property name="maximum">
+     <number>100</number>
+    </property>
+   </widget>
+   <widget class="QSpinBox" name="ratio">
+    <property name="geometry">
+     <rect>
+      <x>400</x>
+      <y>610</y>
+      <width>81</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+   </widget>
+   <widget class="QSpinBox" name="cannyKsize">
+    <property name="geometry">
+     <rect>
+      <x>660</x>
+      <y>620</y>
+      <width>81</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+    <property name="minimum">
+     <number>3</number>
+    </property>
+    <property name="singleStep">
+     <number>2</number>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="conv">
+    <property name="geometry">
+     <rect>
+      <x>140</x>
+      <y>670</y>
+      <width>141</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+    <item>
+     <property name="text">
+      <string>original</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>bgr -&gt; yuv444</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>bgr -&gt; yuv422</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>bgr -&gt; yuv420</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>yuv444 -&gt; bgr</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>yuv422 -&gt; bgr</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>yuv420 -&gt; bgr</string>
+     </property>
+    </item>
+   </widget>
+   <widget class="QLabel" name="convLabel">
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>680</y>
+      <width>91</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Conversion:</string>
     </property>
    </widget>
   </widget>

@@ -19,9 +19,7 @@ public:
     ~MainWindow();
 
 private slots:
-    void on_open_image_clicked();
-
-    void on_optionBox_currentIndexChanged(const QString &arg1);
+    void on_optionBox_currentIndexChanged(int index);
 
     void openFile(String filePath);
 
@@ -29,11 +27,45 @@ private slots:
 
     void on_playButton_clicked();
 
+    void on_openImage_clicked();
+
+    void on_selectWatermark_clicked();
+
+    void on_watermarkText_textChanged();
+
+    void on_thresholdType_currentIndexChanged(int index);
+
+    void on_thresholdValue_valueChanged(int arg1);
+
     void on_slider_valueChanged(int value);
 
-    void on_threshold_value_valueChanged(int value);
+    void on_colorSpace_currentIndexChanged(int index);
 
-    void on_threshold_type_currentIndexChanged(int index);
+    void on_kernelWidth_valueChanged(int arg1);
+
+    void on_kernelHeight_valueChanged(int arg1);
+
+    void on_operator_2_currentIndexChanged(int index);
+
+    void on_element_currentIndexChanged(int index);
+
+    void on_kernelSize_valueChanged(int arg1);
+
+    void on_scale_valueChanged(int arg1);
+
+    void on_delta_valueChanged(int arg1);
+
+    void on_kernelSize_2_valueChanged(int arg1);
+
+    void on_gradient_currentIndexChanged(int index);
+
+    void on_lowThreshold_valueChanged(int arg1);
+
+    void on_ratio_valueChanged(int arg1);
+
+    void on_cannyKsize_valueChanged(int arg1);
+
+    void on_conv_currentIndexChanged(int index);
 
 private:
     Ui::MainWindow *ui;

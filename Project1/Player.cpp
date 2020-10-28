@@ -7,9 +7,23 @@ using namespace std;
 Player::Player()
 {
     stop = false;
-    option = 'a';
-    frame = -1;
+    option = 100;
+    frameIndex = -1;
     isVideo = false;
+    morphSize = 0;
+    morphOperator = 0;
+    morphelem = 0;
+    kernelHeight = 1;
+    kernelWidth = 1;
+    gradient = 0;
+    ksize = 1;
+    scale = 1;
+    delta = 0;
+    lowThreshold = 0;
+    maxLowthreshold = 100;
+    ratio = 3;
+    cannyKsize = 3;
+    conversion = 0;
 }
 
 Player::~Player(){
@@ -19,7 +33,8 @@ Player::~Player(){
 void Player::setLabel(QLabel *label){
     this->label = label;
 }
-void Player::setOption(char option){
+
+void Player::setOption(int option){
     this->option = option;
     if (!isVideo && !img.empty()){
         displayImg();
@@ -34,11 +49,10 @@ void Player::displayVideo(){
     int fps = video.get(CAP_PROP_FPS);
     int delay = 1000 / fps;
     for(;;){
-        if(frame != -1){
-            video.set(CAP_PROP_POS_FRAMES,frame);
-            frame = -1;
+        if(frameIndex != -1){
+            video.set(CAP_PROP_POS_FRAMES,frameIndex);
+            frameIndex = -1;
         }
-
        video.read(img);
        // check if we succeeded
        if (img.empty()) {
@@ -66,16 +80,110 @@ void Player::displayImg(){
 }
 
 void Player::setImage(Mat img){
+    if(!isVideo&&this->img.empty()){
+        img.copyTo(original);
+    }else if(isVideo){
+        img.copyTo(original);
+    }
+
     this->img = img;
-    if(isVideo)
-        img.copyTo(original);
-    else if(!isVideo && original.empty())
-        img.copyTo(original);
+
 }
 
 void Player::setVideo(VideoCapture video){
     this->video = video;
     isVideo = true;
+}
+
+void Player::setWaterMarkText(String text){
+    this->watermarkText = text;
+    if(!isVideo && !img.empty())
+        displayImg();
+}
+
+void Player::setColorSpace(int colorSpace){
+    this->colorSpace  = colorSpace;
+    if(!isVideo && !img.empty())
+        displayImg();
+}
+
+void Player::setKernelWidth(int w){
+    this->kernelWidth = w;
+    if(!isVideo && !img.empty())
+        displayImg();
+}
+
+void Player::setKernelHeight(int h){
+    this->kernelHeight = h;
+    if(!isVideo && !img.empty())
+        displayImg();
+}
+
+void Player::setMorphOperator(int mp){
+    this->morphOperator = mp;
+    if(!isVideo && !img.empty())
+        displayImg();
+}
+
+void Player::setMorphSize(int ms){
+    this->morphSize = ms;
+    if(!isVideo && !img.empty())
+        displayImg();
+}
+
+void Player::setGradient(int g){
+    this->gradient = g;
+    if(!isVideo && !img.empty())
+        displayImg();
+}
+
+void Player::setMorhElem(int me){
+    this->morphelem = me;
+    if(!isVideo && !img.empty())
+        displayImg();
+}
+
+void Player::setKsize(int ksize){
+   this->ksize = ksize < 30 ? ksize+2 : -1;
+    if(!isVideo && !img.empty())
+        displayImg();
+}
+
+void Player::setScale(int scale){
+    this->scale = scale;
+    if(!isVideo && !img.empty())
+        displayImg();
+}
+
+void Player::setDelta(int delta){
+    this->delta = delta;
+    if(!isVideo && !img.empty())
+        displayImg();
+}
+
+void Player::setLowThreshold(int lt){
+    this->lowThreshold = lt >= 100 ? lt : 99;
+
+    if(!isVideo && !img.empty())
+        displayImg();
+}
+
+void Player::setRatio(int r){
+    this->ratio = r;
+    if(!isVideo && !img.empty())
+        displayImg();
+}
+
+void Player::setCannyKsize(int ck){
+    this->cannyKsize = ck;
+    if(!isVideo && !img.empty())
+        displayImg();
+}
+
+void Player::setConversion(int c){
+    this->conversion = c;
+    if(!isVideo && !img.empty())
+        displayImg();
 }
 
 bool Player::getIsVideo(){
@@ -86,45 +194,68 @@ VideoCapture Player::getVideo(){
     return this->video;
 }
 
+
+Mat Player::myConverter(){
+    switch(conversion){
+        case 1: return bgr2yuv444();
+        case 2: return bgr2yuv422();
+        case 3: return bgr2yuv420();
+        case 4: return yuv444ToBgr();
+        case 5: return yuv422ToBgr();
+        case 6: return yuv420ToBgr();
+    }
+
+    return getImg();
+}
+
 Mat Player::getImg(){
-  //  Mat copy;
-   // original.copyTo(copy);
+    original.copyTo(img);
     return img;
 }
 
-char Player::getOption(){
+int Player::getOption(){
     return option;
 }
 
 Mat Player::doOptionWork(){
+    Mat image;
     switch (option) {
-        case 'a': return waterMark();
-        case 'b': return changeSpaceAndshowChannels();
-        case 'c': return colorHistogram();
-        case 'd': return grayAndHistogram();
-        case 'e': return gaussianBlurFilters();
-        case 'f': return segmentation();
-        case '3': return bgr2yuv444();
-        case 'g': return morphologyTransformations();
-        case 'h': return gradients();
-        case 'i': return canny();
-        case 'o': Mat image; original.copyTo(image); img = image; return image;
+        case 1: return waterMark();
+        case 2: return changeSpaceAndshowChannels();
+        case 3: return colorHistogram();
+        case 4: return grayAndHistogram();
+        case 5: return gaussianBlurFilters();
+        case 6: return segmentation();
+        case 7: return morphologyTransformations();
+        case 8: return gradients();
+        case 9: return canny();
+        case 10: return myConverter();
     }
-    return img;
+    img.copyTo(image);
+    return image;
 }
 
-Mat Player::waterMark(String filepaht, String text){
-    Mat logo = imread(filepaht);
-    Mat imageROI = img(cv::Rect(10,10,logo.cols,logo.rows));
-    logo.copyTo(imageROI);
-    putText(img, text, Point(20, img.rows - 50), FONT_HERSHEY_COMPLEX,1, Scalar(102, 20, 0), 2);
+Mat Player::waterMark(){
+    Mat img = getImg();
+    if (!empty(watermarkPicPath)){
+        if (watermarkPic.empty()) watermarkPic = imread(watermarkPicPath);
+        Mat imageROI = img(cv::Rect(10,10,watermarkPic.cols,watermarkPic.rows));
+        watermarkPic.copyTo(imageROI);
+    }
+
+    if(!empty(watermarkText))
+        putText(img, watermarkText, Point(20, img.rows - 50), FONT_HERSHEY_COMPLEX,1, Scalar(102, 20, 0), 2);
     return img;
 }
 
 Mat Player::changeSpaceAndshowChannels(){
     Mat channels[3];
     Mat image = getImg();
-    split(img,channels);
+    if(colorSpace == 0)
+        cvtColor(image, image, COLOR_BGR2YUV);
+    else
+        cvtColor(image, image, COLOR_BGR2HSV);
+    split(image,channels);
 
     namedWindow("Red", WINDOW_NORMAL);
     imshow("Red",channels[0]);
@@ -137,14 +268,13 @@ Mat Player::changeSpaceAndshowChannels(){
     namedWindow("Blue", WINDOW_NORMAL);
     imshow("Blue",channels[2]);
 
-    cvtColor(img, img, WINDOW_NORMAL);
-    return img;
+    return image;
 }
 
 Mat Player::colorHistogram(){
     vector<Mat> bgr_planes;
     Mat src = getImg();
-    split( img, bgr_planes );
+    split( src, bgr_planes );
     int histSize = 256;
 
     float range[] = { 0, 256 }; //the upper boundary is exclusive
@@ -181,43 +311,28 @@ Mat Player::colorHistogram(){
 
     namedWindow("calcHist Demo", WINDOW_NORMAL);
     imshow("calcHist Demo", histImage );
-    return img;
+    return src;
 }
 
 Mat Player::grayAndHistogram(){
     Mat greyMat;
     Mat image = getImg();
-    cvtColor(img, greyMat, COLOR_BGR2GRAY);
+    cvtColor(image, greyMat, COLOR_BGR2GRAY);
 
     Mat dst;
     equalizeHist(greyMat, dst);
-    imshow( "Equalized Image", dst);
+    namedWindow("Equalized Image", WINDOW_NORMAL);
+    imshow("Equalized Image", dst);
 
     return greyMat;
 }
 
 
 Mat Player::gaussianBlurFilters(){
-    Mat image_blurred_with_3x3_kernel;
+    Mat dst;
     Mat image = getImg();
-    GaussianBlur(img, image_blurred_with_3x3_kernel, Size(3, 3), 0);
-
-    //Blur the image with 5x5 Gaussian kernel
-    Mat image_blurred_with_5x5_kernel;
-    GaussianBlur(img, image_blurred_with_5x5_kernel, Size(5, 5), 0);
-
-    //Define names of the windows
-    String window_name_blurred_with_3x3_kernel = "Image Blurred with 3 x 3 Gaussian Kernel";
-    String window_name_blurred_with_5x5_kernel = "Image Blurred with 5 x 5 Gaussian Kernel";
-
-    // Create windows with above names
-    namedWindow(window_name_blurred_with_3x3_kernel);
-    namedWindow(window_name_blurred_with_5x5_kernel);
-
-    // Show our images inside the created windows.
-    imshow(window_name_blurred_with_3x3_kernel, image_blurred_with_3x3_kernel);
-    imshow(window_name_blurred_with_5x5_kernel, image_blurred_with_5x5_kernel);
-    return img;
+    GaussianBlur(image, dst, Size(kernelWidth, kernelHeight), 0);
+    return dst;
 }
 
 /**
@@ -227,27 +342,33 @@ Mat Player::gaussianBlurFilters(){
 Mat Player::segmentation(){
     Mat image = getImg();
     Mat gray, dst;
-    cvtColor(img, gray, COLOR_BGR2GRAY); // Convert the image to Gray
-    threshold(gray, dst, threshold_value, 255, threshold_type );
+    cvtColor(image, gray, COLOR_BGR2GRAY); // Convert the image to Gray
+    threshold(gray, dst, thresholdValue, 255, thresholdType );
     return dst;
 }
 
-void Player::setFrame(int frame){
-    this->frame = frame;
-}
 
 void Player::setThresholdType(int type){
-    this->threshold_type = type;
-    displayImg();
+    this->thresholdType = type;
+    if(!isVideo && !getImg().empty())
+        displayImg();
 }
 
 void Player::setThresholdValue(int value){
-    this->threshold_value = value;
-    displayImg();
+    this->thresholdValue = value;
+    if(!isVideo && !getImg().empty())
+        displayImg();
 }
 
+void Player::setWaterMarkPicPath(String path){
+    watermarkPicPath = path;
+    watermarkPic = NULL;
+    if(!isVideo && !getImg().empty())
+        displayImg();
+}
 //yuv420
 Mat Player::bgr2yuv420(){
+    Mat img = getImg();
     int rows = img.rows;
     int cols = img.cols;
 
@@ -255,9 +376,9 @@ Mat Player::bgr2yuv420(){
     Mat u_array(rows / 4, cols, CV_8UC1);
     Mat v_array(rows / 4, cols, CV_8UC1);
 
-    int u_row = rows;     // u pertence ao intervalo [img.rows, img.rows*1.25[
+    int u_row = rows;     // U belongs to the range [img.rows, img.rows*1.25[
     int u_col = 0;
-    int v_row = rows * 5 / 4;  // v pertence ao intervalo [img.rows*1.25, img.rows*1.5[
+    int v_row = rows * 5 / 4;  // V belongs to the range [img.rows*1.25, img.rows*1.5[
     int v_col = 0;
 
     for(int i = 0; i < rows; i++)
@@ -295,6 +416,10 @@ Mat Player::bgr2yuv420(){
     return result;
 }
 
+/**
+ * @brief converts a bgr image to yuv444 format
+ * @return yuv444 image
+ */
 Mat Player::bgr2yuv444(){
     int rows = img.rows;
     int cols = img.cols;
@@ -323,12 +448,13 @@ Mat Player::bgr2yuv444(){
     merge(channels, result);
     setImage(result);
 
-    namedWindow("bgr", WINDOW_NORMAL);
-    imshow("bgr", yuv444ToBgr());
-
     return result;
 }
 
+/**
+ * @brief converts a bgr image to yuv222 format
+ * @return yuv222 image
+ */
 Mat Player::bgr2yuv422(){
     int rows = img.rows;
     int cols = img.cols;
@@ -374,6 +500,10 @@ Mat Player::bgr2yuv422(){
     return result;
 }
 
+/**
+ * @brief converts a yuv420 image to bgr format
+ * @return bgr image
+ */
 Mat Player::yuv420ToBgr(){
     int rows = img.rows;
     int cols = img.cols;
@@ -403,12 +533,19 @@ Mat Player::yuv420ToBgr(){
         unsigned char U;
         unsigned char V;
         for (int j = 0; j < cols; j++){
+            // Y1 Y2 Y3 Y4
+            // Y5 Y6 Y7 Y8
+            // U1 U2 U3 U4
+            // V1 V2 V3 V4
 
-            Y1 = img.ptr<uchar>(i)[j];
-            Y2 = img.ptr<uchar>(i + 1)[j];
+
+            //Y1 and Y5 use the same U and V
+            Y1 = img.ptr<uchar>(i)[j];      //Y1
+            Y2 = img.ptr<uchar>(i + 1)[j];  //Y5
 
             if(v_row == rows) break;
 
+            //1 U and 1 V for each 2 cols
             if(j%2 == 0){
                 U = img.ptr<uchar>(u_row)[u_cols++];
                 V = img.ptr<uchar>(v_row)[v_cols++];
@@ -439,23 +576,22 @@ Mat Player::yuv420ToBgr(){
     return result;
 }
 
-Mat Player::yuv422ToBgr(){
 
+Mat Player::yuv422ToBgr(){
     int rows = img.rows;
     int cols = img.cols;
+    Mat bmat(rows / 2, cols, CV_8UC1);
+    Mat gmat(rows / 2, cols, CV_8UC1);
+    Mat rmat(rows / 2, cols, CV_8UC1);
 
-    Mat b_array(rows * 2 / 3, cols, CV_8UC1);
-    Mat g_array(rows * 2 / 3, cols, CV_8UC1);
-    Mat r_array(rows * 2 / 3, cols, CV_8UC1);
-
-    int u_row = rows * 2 / 3;
+    int u_row = rows / 2;
     int u_col = 0;
-    int v_row = rows * 1 / 6;
+    int v_row = u_row * 3 / 2;
     int v_col = 0;
     unsigned char Y;
     unsigned char U;
     unsigned char V;
-    for (int i = 0; i < rows * 2 / 3; i++)
+    for (int i = 0; i < rows / 2; i++)
     {
         if (u_col == cols) {
             u_row++;
@@ -469,7 +605,7 @@ Mat Player::yuv422ToBgr(){
         for (int j = 0; j < cols; j++)
         {
             Y = img.ptr<uchar>(i)[j];
-            if (i % 2 == 0 && j % 2 == 0) {
+            if (j % 2 == 0) {
                 U = img.ptr<uchar>(u_row)[u_col++];
                 V = img.ptr<uchar>(v_row)[v_col++];
             }
@@ -477,13 +613,14 @@ Mat Player::yuv422ToBgr(){
             unsigned char G = Y - 0.714136 * V - 0.344136 * U + 135.459;
             unsigned char R = Y + 1.402 * V - 121.889 * pow(10, -6) * U - 179.456;
 
-            b_array.ptr<uchar>(i)[j] = B;
-            g_array.ptr<uchar>(i)[j] = G;
-            r_array.ptr<uchar>(i)[j] = R;
+            bmat.ptr<uchar>(i)[j] = B;
+            gmat.ptr<uchar>(i)[j] = G;
+            rmat.ptr<uchar>(i)[j] = R;
         }
     }
-    vector<Mat> channels{ b_array, g_array, r_array };
     Mat result;
+    vector<Mat> channels{ bmat, gmat, rmat };
+
     // Create the output matrix
     merge(channels, result);
     setImage(result);
@@ -524,18 +661,15 @@ Mat Player::yuv444ToBgr(){
 }
 
 Mat Player::morphologyTransformations(){
-    int operation = morph_operator + 2;
+    int operation = morphOperator + 2;
 
-    Mat element = getStructuringElement(0, Size( 2*morph_size + 1, 2*morph_size+1 ), Point( morph_size, morph_size ) );
+    Mat element = getStructuringElement(morphelem, Size(2*morphSize + 1, 2*morphSize+1), Point(morphSize, morphSize));
     Mat dst;
     morphologyEx(getImg(), dst, operation, element );
     return dst;
 }
 
 Mat Player::gradients(){
-    int ksize = 1;
-    int scale = 1;
-    int delta = 0;
     int ddepth = CV_16S;
 
     Mat dst;
@@ -548,12 +682,21 @@ Mat Player::gradients(){
     Mat grad_x, grad_y;
     Mat abs_grad_x, abs_grad_y;
 
-  //  Sobel(dst, grad_x, ddepth, 1, 0, ksize, scale, delta, BORDER_DEFAULT);
-  //  Sobel(dst, grad_y, ddepth, 0, 1, ksize, scale, delta, BORDER_DEFAULT);
-//    Scharr(dst, grad_x, ddepth, 1, 0, scale, delta, BORDER_DEFAULT);
-  //  Scharr(dst, grad_y, ddepth, 0, 1, scale, delta, BORDER_DEFAULT);
-      Laplacian(dst, grad_x, ddepth, ksize, scale, delta, BORDER_DEFAULT);
-      Laplacian(dst, grad_y, ddepth,  ksize, scale, delta, BORDER_DEFAULT);
+    if(gradient == 0){
+        Sobel(dst, grad_x, ddepth, 1, 0, ksize, scale, delta, BORDER_DEFAULT);
+        Sobel(dst, grad_y, ddepth, 0, 1, ksize, scale, delta, BORDER_DEFAULT);
+    }
+
+    if(gradient == 1){
+        Scharr(dst, grad_x, ddepth, 1, 0, scale, delta, BORDER_DEFAULT);
+        Scharr(dst, grad_y, ddepth, 0, 1, scale, delta, BORDER_DEFAULT);
+    }
+
+    if(gradient == 2){
+        Laplacian(dst, grad_x, ddepth, ksize, scale, delta, BORDER_DEFAULT);
+        Laplacian(dst, grad_y, ddepth,  ksize, scale, delta, BORDER_DEFAULT);
+    }
+
     // converting back to CV_8U
     convertScaleAbs(grad_x, abs_grad_x);
     convertScaleAbs(grad_y, abs_grad_y);
@@ -564,11 +707,8 @@ Mat Player::gradients(){
 
 
 Mat Player::canny(){
-    int lowThreshold = 0;
-    int max_lowThreshold = 100;
-    int ratio = 3;
-    int kernel_size = 3;
 
+    Mat img = getImg();
     Mat dst, img_gray, detected_edges;
     dst.create(img.size(), img.type());
 
@@ -576,7 +716,7 @@ Mat Player::canny(){
 
     blur( img_gray, detected_edges, Size(3,3) );
 
-    Canny( detected_edges, detected_edges, lowThreshold, lowThreshold*ratio, kernel_size );
+    Canny( detected_edges, detected_edges, lowThreshold, lowThreshold*ratio, cannyKsize );
 
     dst = Scalar::all(0);
     img.copyTo(dst, detected_edges);
