@@ -20,6 +20,7 @@ Player::Player()
     scale = 1;
     delta = 0;
     lowThreshold = 0;
+    colorSpace = 0;
     maxLowthreshold = 100;
     ratio = 3;
     cannyKsize = 3;
@@ -196,6 +197,18 @@ VideoCapture Player::getVideo(){
 
 
 Mat Player::myConverter(){
+   /* if(lastConversion != -1 && lastConversion != conversion){
+        setImage(getImg());
+        switch(lastConversion){
+            case 1: bgr2yuv444();break;
+            case 2:  bgr2yuv422(); break;
+            case 3:  bgr2yuv420(); break;
+            case 4:  yuv444ToBgr();break;
+            case 5:  yuv422ToBgr();break;
+            case 6:  yuv420ToBgr();break;
+        }
+    }
+    lastConversion = conversion;*/
     switch(conversion){
         case 1: return bgr2yuv444();
         case 2: return bgr2yuv422();
@@ -231,7 +244,7 @@ Mat Player::doOptionWork(){
         case 9: return canny();
         case 10: return myConverter();
     }
-    img.copyTo(image);
+    original.copyTo(image);
     return image;
 }
 
@@ -253,8 +266,10 @@ Mat Player::changeSpaceAndshowChannels(){
     Mat image = getImg();
     if(colorSpace == 0)
         cvtColor(image, image, COLOR_BGR2YUV);
-    else
+    else{
         cvtColor(image, image, COLOR_BGR2HSV);
+    }
+
     split(image,channels);
 
     namedWindow("Red", WINDOW_NORMAL);
@@ -366,6 +381,7 @@ void Player::setWaterMarkPicPath(String path){
     if(!isVideo && !getImg().empty())
         displayImg();
 }
+
 //yuv420
 Mat Player::bgr2yuv420(){
     Mat img = getImg();
@@ -447,7 +463,6 @@ Mat Player::bgr2yuv444(){
     vector<Mat> channels{y_array, u_array, v_array};
     merge(channels, result);
     setImage(result);
-
     return result;
 }
 

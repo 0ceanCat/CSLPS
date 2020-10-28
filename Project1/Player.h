@@ -35,6 +35,7 @@ class Player: public QObject{
         int ratio = 3;
         int cannyKsize = 3;
         int conversion;
+        int lastConversion = -1;
         String watermarkPicPath;
         Mat watermarkPic;
         String watermarkText;
