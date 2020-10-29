@@ -42,7 +42,9 @@ void Player::setOption(int option){
     }
 }
 
-
+/**
+ * @brief extracts frames and show them in label
+ */
 void Player::displayVideo(){
     stop = false;
     isVideo = true;
@@ -69,6 +71,9 @@ void Player::displayVideo(){
 }
 
 
+/**
+ * @brief display image in label
+ */
 void Player::displayImg(){
     Mat result = doOptionWork();
     Mat final;
@@ -80,13 +85,16 @@ void Player::displayImg(){
     label->setScaledContents(true);
 }
 
+/**
+ * @brief set image
+ * @param input
+ */
 void Player::setImage(Mat img){
-    if(!isVideo&&this->img.empty()){
+    if(!isVideo&&this->img.empty()){ //if img is not a frame, and this->img is a empty mat
         img.copyTo(original);
-    }else if(isVideo){
-        img.copyTo(original);
+    }else if(isVideo){ //if img is a frame
+        img.copyTo(original); //all frames are an original image
     }
-
     this->img = img;
 
 }
@@ -98,8 +106,8 @@ void Player::setVideo(VideoCapture video){
 
 void Player::setWaterMarkText(String text){
     this->watermarkText = text;
-    if(!isVideo && !img.empty())
-        displayImg();
+    if(!isVideo && !img.empty())  //if the current resouce is a image
+        displayImg();             //we have displayImg() in the function "displayVideo", so, this line is just for image, not for frame
 }
 
 void Player::setColorSpace(int colorSpace){
@@ -195,20 +203,11 @@ VideoCapture Player::getVideo(){
     return this->video;
 }
 
-
+/**
+ * @brief converts image's color space
+ * @return converted image, or original image
+ */
 Mat Player::myConverter(){
-   /* if(lastConversion != -1 && lastConversion != conversion){
-        setImage(getImg());
-        switch(lastConversion){
-            case 1: bgr2yuv444();break;
-            case 2:  bgr2yuv422(); break;
-            case 3:  bgr2yuv420(); break;
-            case 4:  yuv444ToBgr();break;
-            case 5:  yuv422ToBgr();break;
-            case 6:  yuv420ToBgr();break;
-        }
-    }
-    lastConversion = conversion;*/
     switch(conversion){
         case 1: return bgr2yuv444();
         case 2: return bgr2yuv422();
@@ -249,21 +248,30 @@ Mat Player::doOptionWork(){
 }
 
 Mat Player::waterMark(){
-    Mat img = getImg();
-    if (!empty(watermarkPicPath)){
+    Mat img;
+    if(isVideo) img = this->img;
+    else img = getImg();
+    if (!empty(watermarkPicPath)){ //if watermark picture's file path is not empty
         if (watermarkPic.empty()) watermarkPic = imread(watermarkPicPath);
-        Mat imageROI = img(cv::Rect(10,10,watermarkPic.cols,watermarkPic.rows));
+        Mat imageROI = img(Rect(10,10,watermarkPic.cols,watermarkPic.rows));
         watermarkPic.copyTo(imageROI);
     }
 
-    if(!empty(watermarkText))
+    if(!empty(watermarkText))//if watermark text is not empty
         putText(img, watermarkText, Point(20, img.rows - 50), FONT_HERSHEY_COMPLEX,1, Scalar(102, 20, 0), 2);
     return img;
 }
 
+/**
+ * @brief converts a image to YUV/HSV format
+ * @return YUV or HSV image
+ */
 Mat Player::changeSpaceAndshowChannels(){
     Mat channels[3];
-    Mat image = getImg();
+    Mat image;
+    if(isVideo) image = this->img;
+    else image = getImg();
+
     if(colorSpace == 0)
         cvtColor(image, image, COLOR_BGR2YUV);
     else{
@@ -271,24 +279,34 @@ Mat Player::changeSpaceAndshowChannels(){
     }
 
     split(image,channels);
+    String Name1 = colorSpace == 0? "Y" : "H";
+    String Name2 = colorSpace == 0? "U" : "S";
+    String Name3 = colorSpace == 0? "V" : "V";
 
-    namedWindow("Red", WINDOW_NORMAL);
-    imshow("Red",channels[0]);
+    namedWindow(Name1, WINDOW_NORMAL);
+    imshow(Name1,channels[0]);
 
 
-    namedWindow("Green", WINDOW_NORMAL);
-    imshow("Green",channels[1]);
+    namedWindow(Name2, WINDOW_NORMAL);
+    imshow(Name2,channels[1]);
 
 
-    namedWindow("Blue", WINDOW_NORMAL);
-    imshow("Blue",channels[2]);
+    namedWindow(Name3, WINDOW_NORMAL);
+    imshow(Name3,channels[2]);
 
     return image;
 }
 
+/**
+ * @brief shows color histogram of image
+ * @return input image
+ */
 Mat Player::colorHistogram(){
     vector<Mat> bgr_planes;
-    Mat src = getImg();
+    Mat src;
+    if(isVideo) src = this->img;
+    else src = getImg();
+
     split( src, bgr_planes );
     int histSize = 256;
 
@@ -329,9 +347,15 @@ Mat Player::colorHistogram(){
     return src;
 }
 
+/**
+ * @brief converts image to grayscale and shows equalized image
+ * @return grayscale image
+ */
 Mat Player::grayAndHistogram(){
     Mat greyMat;
-    Mat image = getImg();
+    Mat image;
+    if (isVideo) image = this->img;
+    else image = getImg();
     cvtColor(image, greyMat, COLOR_BGR2GRAY);
 
     Mat dst;
@@ -342,20 +366,29 @@ Mat Player::grayAndHistogram(){
     return greyMat;
 }
 
-
+/**
+ * @brief applies gaussiablur filter to image
+ * @return resulted image
+ */
 Mat Player::gaussianBlurFilters(){
     Mat dst;
-    Mat image = getImg();
+    Mat image;
+
+    if (isVideo) image = this->img;
+    else image = getImg();
+
     GaussianBlur(image, dst, Size(kernelWidth, kernelHeight), 0);
     return dst;
 }
 
 /**
- * @brief A alinea f, Player::segmentation
- * @return
+ * @brief converts image to graysacle and applies threshold
+ * @return resulted image
  */
 Mat Player::segmentation(){
-    Mat image = getImg();
+    Mat image;
+    if (isVideo) image = this->img;
+    else image = getImg();
     Mat gray, dst;
     cvtColor(image, gray, COLOR_BGR2GRAY); // Convert the image to Gray
     threshold(gray, dst, thresholdValue, 255, thresholdType );
@@ -382,9 +415,14 @@ void Player::setWaterMarkPicPath(String path){
         displayImg();
 }
 
-//yuv420
+/**
+ * @brief converts bgr image to yuv420
+ * @return
+ */
 Mat Player::bgr2yuv420(){
     Mat img = getImg();
+    if(isVideo) img = this->img;
+    else img = getImg();
     int rows = img.rows;
     int cols = img.cols;
 
@@ -410,13 +448,21 @@ Mat Player::bgr2yuv420(){
 
         for(int j = 0; j < cols; j++)
         {
-              unsigned char B = img.ptr<Vec3b>(i)[j][0];
-              unsigned char G = img.ptr<Vec3b>(i)[j][1];
-              unsigned char R = img.ptr<Vec3b>(i)[j][2];
+              int B = img.ptr<Vec3b>(i)[j][0];
+              int G = img.ptr<Vec3b>(i)[j][1];
+              int R = img.ptr<Vec3b>(i)[j][2];
 
-              unsigned char Y = 0.299 * R + 0.587 * G + 0.114 * B;
-              unsigned char U = 128 - 0.168736 * R - 0.331264 * G + 0.5 * B;
-              unsigned char V = 128 + 0.5 * R - 0.418688 * G - 0.081312 * B;
+              int Y = 0.299 * R + 0.587 * G + 0.114 * B;
+              int U = 128 - 0.168736 * R - 0.331264 * G + 0.5 * B;
+              int V = 128 + 0.5 * R - 0.418688 * G - 0.081312 * B;
+
+              if (Y < 0) Y = 0;
+              if (U < 0) U = 0;
+              if (V < 0) V = 0;
+
+              if (Y > 255) Y = 255;
+              if (U > 255) U = 255;
+              if (V > 255) V = 255;
 
               result.ptr<uchar>(i)[j] = Y;
               if(i%2==0&&j%2 ==0){
@@ -446,13 +492,21 @@ Mat Player::bgr2yuv444(){
 
     for (int i = 0; i < rows; i++){
         for (int j = 0; j < cols; j++){
-            unsigned char B = img.ptr<Vec3b>(i)[j][0];
-            unsigned char G = img.ptr<Vec3b>(i)[j][1];
-            unsigned char R = img.ptr<Vec3b>(i)[j][2];
+            int B = img.ptr<Vec3b>(i)[j][0];
+            int G = img.ptr<Vec3b>(i)[j][1];
+            int R = img.ptr<Vec3b>(i)[j][2];
 
-            unsigned char Y = 0.299 * R + 0.587 * G + 0.114 * B;
-            unsigned char U = 128 - 0.168736 * R - 0.331264 * G + 0.5 * B;
-            unsigned char V = 128 + 0.5 * R - 0.418688 * G - 0.081312 * B;
+            int Y = 0.299 * R + 0.587 * G + 0.114 * B;
+            int U = 128 - 0.168736 * R - 0.331264 * G + 0.5 * B;
+            int V = 128 + 0.5 * R - 0.418688 * G - 0.081312 * B;
+
+            if (Y < 0) Y = 0;
+            if (U < 0) U = 0;
+            if (V < 0) V = 0;
+
+            if (Y > 255) Y = 255;
+            if (U > 255) U = 255;
+            if (V > 255) V = 255;
 
             y_array.ptr<uchar>(i)[j] = Y;
             u_array.ptr<uchar>(i)[j] = U;
@@ -496,13 +550,13 @@ Mat Player::bgr2yuv422(){
 
         for(int j = 0; j < cols; j++)
         {
-              unsigned char B = img.ptr<Vec3b>(i)[j][0];
-              unsigned char G = img.ptr<Vec3b>(i)[j][1];
-              unsigned char R = img.ptr<Vec3b>(i)[j][2];
+              int B = img.ptr<Vec3b>(i)[j][0];
+              int G = img.ptr<Vec3b>(i)[j][1];
+              int R = img.ptr<Vec3b>(i)[j][2];
 
-              unsigned char Y = 0.299 * R + 0.587 * G + 0.114 * B;
-              unsigned char U = 128 - 0.168736 * R - 0.331264 * G + 0.5 * B;
-              unsigned char V = 128 + 0.5 * R - 0.418688 * G - 0.081312 * B;
+              int Y = 0.299 * R + 0.587 * G + 0.114 * B;
+              int U = 128 - 0.168736 * R - 0.331264 * G + 0.5 * B;
+              int V = 128 + 0.5 * R - 0.418688 * G - 0.081312 * B;
 
               result.ptr<uchar>(i)[j] = Y;
               if(j%2 ==0){
@@ -543,20 +597,20 @@ Mat Player::yuv420ToBgr(){
             v_row++;
             v_cols = 0;
         }
-        unsigned  char Y1;
-        unsigned char Y2;
-        unsigned char U;
-        unsigned char V;
+        int Y1;
+        int Y5;
+        int U;
+        int V;
         for (int j = 0; j < cols; j++){
             // Y1 Y2 Y3 Y4
             // Y5 Y6 Y7 Y8
             // U1 U2 U3 U4
             // V1 V2 V3 V4
 
-
-            //Y1 and Y5 use the same U and V
-            Y1 = img.ptr<uchar>(i)[j];      //Y1
-            Y2 = img.ptr<uchar>(i + 1)[j];  //Y5
+            //Y1,Y5,Y2,Y6 use U1 and V1
+            //for each j, i convert the Y of the line i and the Y of the next line
+            Y1 = img.ptr<uchar>(i)[j];
+            Y5 = img.ptr<uchar>(i + 1)[j];
 
             if(v_row == rows) break;
 
@@ -566,13 +620,30 @@ Mat Player::yuv420ToBgr(){
                 V = img.ptr<uchar>(v_row)[v_cols++];
             }
 
-            unsigned char B1 = Y1 + 4.06298 * pow(10, -7) * V + 1.772 * U - 226.816;
-            unsigned char G1 = Y1 - 0.714136 * V - 0.344136 * U + 135.459;
-            unsigned char R1 = Y1 + 1.402 * V - 121.889 * pow(10, -6) * U - 179.456;
+            int B1 = Y1 + 4.06298 * pow(10, -7) * V + 1.772 * U - 226.816;
+            int G1 = Y1 - 0.714136 * V - 0.344136 * U + 135.459;
+            int R1 = Y1 + 1.402 * V - 121.889 * pow(10, -6) * U - 179.456;
 
-            unsigned char B2 = Y2 + 4.06298 * pow(10, -7) * V + 1.772 * U - 226.816;
-            unsigned char G2 = Y2 - 0.714136 * V - 0.344136 * U + 135.459;
-            unsigned char R2 = Y2 + 1.402 * V - 121.889 * pow(10, -6) * U - 179.456;
+            int B2 = Y5 + 4.06298 * pow(10, -7) * V + 1.772 * U - 226.816;
+            int G2 = Y5 - 0.714136 * V - 0.344136 * U + 135.459;
+            int R2 = Y5 + 1.402 * V - 121.889 * pow(10, -6) * U - 179.456;
+
+            if (B1 < 0) B1 = 0;
+            if (G1 < 0) G1 = 0;
+            if (R1 < 0) R1 = 0;
+
+            if (B1 > 255) B1 = 255;
+            if (G1 > 255) G1 = 255;
+            if (R1 > 255) R1 = 255;
+
+
+            if (B2 < 0) B2 = 0;
+            if (G2 < 0) G2 = 0;
+            if (R2 < 0) R2 = 0;
+
+            if (B2 > 255) B2 = 255;
+            if (G2 > 255) G2 = 255;
+            if (R2 > 255) R2 = 255;
 
             b_array.ptr<uchar>(i)[j] = B1;
             g_array.ptr<uchar>(i)[j] = G1;
@@ -603,9 +674,9 @@ Mat Player::yuv422ToBgr(){
     int u_col = 0;
     int v_row = u_row * 3 / 2;
     int v_col = 0;
-    unsigned char Y;
-    unsigned char U;
-    unsigned char V;
+    int Y;
+    int U;
+    int V;
     for (int i = 0; i < rows / 2; i++)
     {
         if (u_col == cols) {
@@ -624,9 +695,17 @@ Mat Player::yuv422ToBgr(){
                 U = img.ptr<uchar>(u_row)[u_col++];
                 V = img.ptr<uchar>(v_row)[v_col++];
             }
-            unsigned char B = Y + 4.06298 * pow(10, -7) * V + 1.772 * U - 226.816;
-            unsigned char G = Y - 0.714136 * V - 0.344136 * U + 135.459;
-            unsigned char R = Y + 1.402 * V - 121.889 * pow(10, -6) * U - 179.456;
+            int B = Y + 4.06298 * pow(10, -7) * V + 1.772 * U - 226.816;
+            int G = Y - 0.714136 * V - 0.344136 * U + 135.459;
+            int R = Y + 1.402 * V - 121.889 * pow(10, -6) * U - 179.456;
+
+            if (B < 0) B = 0;
+            if (G < 0) G = 0;
+            if (R < 0) R = 0;
+
+            if (B > 255) B = 255;
+            if (G > 255) G = 255;
+            if (R > 255) R = 255;
 
             bmat.ptr<uchar>(i)[j] = B;
             gmat.ptr<uchar>(i)[j] = G;
@@ -650,9 +729,9 @@ Mat Player::yuv444ToBgr(){
     int rows = img.rows;
     int cols = img.cols;
     Mat result(rows, cols, CV_8UC3);
-    unsigned char Y;;
-    unsigned char U;
-    unsigned char V;
+    int Y;
+    int U;
+    int V;
 
     for (int i = 0; i < rows; i++)
     {
@@ -662,9 +741,17 @@ Mat Player::yuv444ToBgr(){
             U = img.ptr<Vec3b>(i)[j][1];
             V = img.ptr<Vec3b>(i)[j][2];
 
-            unsigned char B = Y + 4.06298 * pow(10, -7) * V + 1.772 * U - 226.816;
-            unsigned char G = Y - 0.714136 * V - 0.344136 * U + 135.459;
-            unsigned char R = Y + 1.402 * V - 121.889 * pow(10, -6) * U - 179.456;
+            int B = Y + 4.06298 * pow(10, -7) * V + 1.772 * U - 226.816;
+            int G = Y - 0.714136 * V - 0.344136 * U + 135.459;
+            int R = Y + 1.402 * V - 121.889 * pow(10, -6) * U - 179.456;
+
+            if (B < 0) B = 0;
+            if (G < 0) G = 0;
+            if (R < 0) R = 0;
+
+            if (B > 255) B = 255;
+            if (G > 255) G = 255;
+            if (R > 255) R = 255;
 
             result.ptr<Vec3b>(i)[j][0] = B;
             result.ptr<Vec3b>(i)[j][1] = G;
