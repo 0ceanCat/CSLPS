@@ -1,0 +1,28 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+D:/Universidade/3ano/CLP/Project2/header/BitInputStream.h
+fstream
+-
+string
+D:/Universidade/3ano/CLP/Project2/header/string
+
+D:/Universidade/3ano/CLP/Project2/header/BitOutputStream.h
+fstream
+-
+string
+D:/Universidade/3ano/CLP/Project2/header/string
+
+D:/Universidade/3ano/CLP/Project2/source/main.cpp
+iostream
+-
+../header/BitOutputStream.h
+D:/Universidade/3ano/CLP/Project2/header/BitOutputStream.h
+../header/BitInputStream.h
+D:/Universidade/3ano/CLP/Project2/header/BitInputStream.h
+
