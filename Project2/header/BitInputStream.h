@@ -9,7 +9,13 @@ private:
     /**
      * O ponteiro para a posicao do bit
      */
-    int position;
+    int BufferBitposition;
+
+    /**
+     * O ponteiro para a posicao do bit.
+     * Usado em readNbits
+     */
+    int dataBitPosition;
 
     /**
      * 1 char/uchar ocupa 1 byte na memoria, ou seja, 8 bits.
@@ -38,14 +44,14 @@ public:
      *  Ler um bit do buffer para data
      * @param data: O "container" onde o bit lido vai ficar
      */
-    void readBit(unsigned char& data);
+    void readBit(int& data);
 
     /**
      * Ler n bits para o data
      * @param data:  O "container" onde os bits lidos vao ficar
      * @param n: Numero de bits que quer ler
      */
-    void readNbits(unsigned char& data, int n);
+    void readNbits(int & data, int n);
 
     /**
      * Se o ficheiro tiver > strLen bytes, lê strLen letras (chars) e forma um string,
@@ -74,7 +80,7 @@ public:
     void close();
 
     /**
-     * Limpar o buffer e reset o position
+     * Limpar o buffer e reset o BufferBitposition
      */
     void clear();
 

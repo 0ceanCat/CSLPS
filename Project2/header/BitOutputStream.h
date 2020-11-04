@@ -48,7 +48,7 @@ public:
     void writeBit(int data);
 
     /**
-     * Escrever n bits menos significativos do data no buffer
+     * Escrever n bits mais significativos do data no buffer
      * @param data: Um numero ou uma letra ou uma character
      * @param n: Numero de bits que quer ler
      */
@@ -67,7 +67,7 @@ public:
     string bufferToString();
 
     /**
-     * Limpar o buffer e reset o position
+     * Limpar o buffer e reset o BufferBitposition
      */
     void clear();
 

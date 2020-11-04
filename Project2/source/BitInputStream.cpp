@@ -6,31 +6,41 @@
 #include "string"
 
 BitInputStream::BitInputStream(string inputFile) {
-    this->position = 0;
+    this->BufferBitposition = 7;
+    this->dataBitPosition = 7;
     this->buffer = 0;
     this->input.open(inputFile, ios::binary);
 }
 
 BitInputStream::BitInputStream() {
-    this->position = 0;
+    this->BufferBitposition = 7;
+    this->dataBitPosition = 7;
     this->buffer = 0;
 }
 
-void BitInputStream::readBit(unsigned char& data) {
+void BitInputStream::readBit(int & data) {
     if (isEmpty()){
         if (input.eof())
             return;
         input.read((char*)&buffer, 1);
     }
-    data |= buffer & (0x01 << position++);
-    if(position == 8)
+    unsigned char bit = buffer & (0x01 << BufferBitposition--);
+
+    if (bit > 0)
+        data |= 0x01 << dataBitPosition--;
+    else
+        dataBitPosition--;
+
+    if(BufferBitposition == -1)
         clear();
 }
 
-void BitInputStream::readNbits(unsigned char& data, int n) {
-    for (int i = 0; i < n && !input.eof(); i++){
+void BitInputStream::readNbits(int & data, int n) {
+    for (int i = n - 1; i >= 0 && !input.eof(); i--){
+        dataBitPosition = i;
         readBit(data);
     }
+    dataBitPosition = 7;
 }
 
 string BitInputStream::readString(int strLen) {
@@ -48,7 +58,7 @@ string BitInputStream::readString(int strLen) {
 char BitInputStream::readChar(){
     if (!input.eof()){
         unsigned char c;
-        readNbits(c, 8);
+        readNbits(reinterpret_cast<int &>(c), 8);
         return c;
     }
     return '\0';
@@ -67,7 +77,7 @@ bool BitInputStream::isEmpty() {
 }
 
 void BitInputStream::clear() {
-    position = 0;
+    BufferBitposition = 7;
     buffer = 0;
 }
 

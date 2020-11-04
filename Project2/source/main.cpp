@@ -15,7 +15,7 @@ void writeBitTest(){
 void writeNbitsTest(){
     BitOutputStream bs;
     bs.open("C:/Users/Predator/Desktop/write");
-    bs.writeNbits(11, 4);
+    bs.writeNbits(2020, 11);
     bs.flush();
     bs.close();
 }
@@ -27,26 +27,25 @@ void writeStringTest(){
 }
 
 void readBitTest(){
-    BitInputStream is("C:/Users/Predator/Desktop/read");
-    unsigned char bits;
-    //conteudo: 0 0 0 0 1 0 1 1
-    is.readBit(bits); // 0 0 0 0 0 0 0 1
-    cout <<"readBit: " << (int) bits << endl;
-    is.readBit(bits); // 0 0 0 0 0 0 1 1
-    cout <<"readBit: " << (int) bits << endl;
-    is.readBit(bits); // 0 0 0 0 0 0 1 1
-    cout <<"readBit: " << (int) bits << endl;
-    is.readBit(bits); // 0 0 0 0 1 0 1 1
-    cout <<"readBit: " << (int) bits << endl;
+    BitInputStream is("C:/Users/Predator/Desktop/write");
+    int bits;
+    //conteudo do ficheiro: 2020 (em decimal)
+    is.readBit(bits); // 1 0 0 0 0 0 0 0
+    cout <<"readBit: " << bits << endl;
+    is.readBit(bits); // 1 1 0 0 0 0 0 0
+    cout <<"readBit: " << bits << endl;
+    is.readBit(bits); // 1 1 1 0 0 0 0 0
+    cout <<"readBit: " << bits << endl;
+    is.readBit(bits); // 1 1 1 1 0 0 0 0
+    cout <<"readBit: " <<  bits << endl;
     is.close();
 }
 
 void readNbitsTest(){
-    BitInputStream is("C:/Users/Predator/Desktop/read");
-    unsigned char bits;
-    // 0 0 0 0 1 1 1 1
-    is.readNbits(bits, 4);
-    cout <<"readNbits: " << (int) bits << endl;
+    BitInputStream is("C:/Users/Predator/Desktop/write");
+    int bits;
+    is.readNbits(bits, 11);
+    cout <<"readNbits: " << bits << endl;
     is.close();
 }
 
@@ -59,30 +58,27 @@ void readStringTest(){
 
 int main() {
     //escrever 2 bits (1 e 1) no ficheiro
-    // 1 1 000
-    // 00 11
-   // writeBitTest();
+    //conteudo do ficheiro deve ser: 1 1 0 0 0 0 0 0  (192 em decimal)
+    //writeBitTest();
 
-    //escrever 4 bits menos significativos do numero 11 no ficheiro
-    //0 0 0 0 1 0 1 1
+    //escrever 11 bits mais significativos do numero 2020 no ficheiro
     //writeNbitsTest();
 
     //escrever o string "Complementos sobre linguagens de programacao" no ficheiro
     //writeStringTest();
 
 
-    //conteudo do ficheiro: numero 11
-    //0 0 0 0 1 0 1 1
+    //conteudo do ficheiro: numero 2020
     //ler bit a bit, em total 4 bits do ficheiro
-    //os resultados devem ser: 1, 3, 3, 11
     //readBitTest();
 
-    //ler 4 bits de uma vez so
+    //ler 11 bits de uma vez so
     //readNbitsTest();
 
     //ler um string do ficheiro
     //Complementos sobre linguagens de programacao
-    readStringTest();
+    //readStringTest();
+
 
     return 0;
 }
