@@ -1,0 +1,4 @@
+ToolSet: w64 6.0 (local)@D:\openCv\mingw64
+Options: 
+
+Options:
