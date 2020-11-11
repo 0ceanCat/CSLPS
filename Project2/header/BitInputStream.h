@@ -47,6 +47,13 @@ public:
     void readBit(int& data);
 
     /**
+     * retornar o bit lido
+     * @return zero ou um
+     */
+    int readBit();
+
+
+    /**
      * Ler n bits para o data
      * @param data:  O "container" onde os bits lidos vao ficar
      * @param n: Numero de bits que quer ler
@@ -88,5 +95,11 @@ public:
      * @return Se o buffer for vazio, true, caso contrario, false
      */
     bool isEmpty();
+
+    /**
+     * verificar se o stream esta aberto
+     * @return true se aberto, false caso contrario
+     */
+    bool isOpen();
 };
 #endif

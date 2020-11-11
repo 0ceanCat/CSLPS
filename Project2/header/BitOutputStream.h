@@ -52,6 +52,13 @@ public:
      * @param data: Um numero ou uma letra ou uma character
      * @param n: Numero de bits que quer ler
      */
+    void writeNbitsOfData(int data, int n);
+
+    /**
+     * Escrever o bit {@data} n vezes
+     * @param data: o bit que quer escrever, zero ou um
+     * @param n: Numero de bits que quer ler
+     */
     void writeNbits(int data, int n);
 
     /**
@@ -74,8 +81,9 @@ public:
     /**
      * Abrir o ficheiro
      * @param filename: caminho do ficheiro
+     * @param app: true, ios::app
      */
-    void open(string filename);
+    void open(string filename, bool app);
 
     /**
      * Escrever todos os bits do buffer no ficheiro, mesmo que o buffer não esteja cheio.
@@ -86,6 +94,12 @@ public:
      * Fechar o ficheiro
      */
     void close();
+
+    /**
+     * verificar se o stream esta aberto
+     * @return true se aberto, false caso contrario
+     */
+    bool isOpen();
 };
 
 
