@@ -5,9 +5,9 @@ using namespace cv;
 using namespace std;
 
 int main() {
-    Predictor p("C:/Users/Predator/Desktop/write.bin", 8, 3, 16);
+    Predictor p("C:/Users/Predator/Desktop/write.bin", 3, 16, 3);
     long time_start = GetTickCount();
-    p.encodeVideo("D:/Universidade/3ano/CLP/ducks_take_off_420_720p50.y4m", YUV444);
+    p.encodeVideo("D:/Universidade/3ano/CLP/akiyo_cif.y4m", YUV420);
     long time_end = GetTickCount();
     long encode = time_end - time_start;
 

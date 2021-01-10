@@ -49,7 +49,7 @@ void Predictor::encodeVideo(const string& videoPath, Format format) {
  * signica que a cena nao mudou.
  * @param frame
  */
-void Predictor::encode(const Mat& frame) {
+void Predictor::encode(Mat& frame) {
     int bits = golomb.countNecessaryBit(mediaFrame(frame));
     if (bitsLastFrame != bits) {//houve uma mudanca da cena
         encodeInter(frame);
@@ -58,13 +58,12 @@ void Predictor::encode(const Mat& frame) {
         encodeIntra(frame);
     }
     bitsLastFrame = bits;
-    //lastFrame = frame;
-    frame.copyTo(lastFrame);
+    lastFrame = frame;
 
 }
 
 
-void Predictor::encodeInter(const Mat& frame) {
+void Predictor::encodeInter(Mat& frame) {
     cout << "Inter" << endl;
     golomb.encode(0); //modo inter
     int bestM = getBestMifUsePredictor(frame);
@@ -73,7 +72,7 @@ void Predictor::encodeInter(const Mat& frame) {
     encodeFrame(frame);
 }
 
-void Predictor::encodeIntra(const Mat &frame) {
+void Predictor::encodeIntra(Mat &frame) {
     cout << "Intra" << endl;
     golomb.encode(1); //modo intra
     bool rowsOk = frame.rows % blockSize == 0;
@@ -84,12 +83,17 @@ void Predictor::encodeIntra(const Mat &frame) {
 
     for (int i = 0; i <= frame.rows - lastBlockHeight; i = i + blockSize) {
         for (int j = 0; j <= frame.cols - lastBlockWidth; j = j + blockSize) {
-            findBestBlockAndEncode(frame(Rect(j, i, blockSize, blockSize)), j, i);
+            Mat block = findBestBlockAndEncode(frame(Rect(j, i, blockSize, blockSize)), j, i);
+            if (shift != 0)
+                block.copyTo(frame(Rect(j, i, blockSize, blockSize)));
+
             // quando o ultimo bloco nao tem pixeis suficientes
             // ou seja, so acontece caso o numero de colunas nao seja multiplo de blockSize
             if (!colsOk && j + blockSize == frame.cols - lastBlockWidth){
                 for (int k = 0; k < blockSize / newBlockSize; ++k) {
-                    findBestBlockAndEncode(frame(Rect(j + blockSize, i + newBlockSize * k, newBlockSize, newBlockSize)), j + blockSize, i);
+                    block = findBestBlockAndEncode(frame(Rect(j + blockSize, i + newBlockSize * k, newBlockSize, newBlockSize)), j + blockSize, i);
+                    if (shift != 0)
+                        block.copyTo(frame(Rect(j + blockSize, i + newBlockSize * k, newBlockSize, newBlockSize)));
                 }
                 break;
             }
@@ -98,7 +102,9 @@ void Predictor::encodeIntra(const Mat &frame) {
         if (!rowsOk && i + blockSize == frame.rows - lastBlockHeight){
             i = i + blockSize;
             for (int j = 0; j <= frame.cols - newBlockSize; j = j + newBlockSize) {
-                findBestBlockAndEncode(frame(Rect(j, i, newBlockSize, newBlockSize)), j, i);
+                Mat block = findBestBlockAndEncode(frame(Rect(j, i, newBlockSize, newBlockSize)), j, i);
+                if (shift != 0)
+                    block.copyTo(frame(Rect(j, i, newBlockSize, newBlockSize)));
             }
             break;
         }
@@ -111,7 +117,7 @@ void Predictor::encodeIntra(const Mat &frame) {
  * @param x posicao x do bloco
  * @param y posicao y do bloco
  */
-void Predictor::findBestBlockAndEncode(const Mat& block, int x, int y) {
+Mat Predictor::findBestBlockAndEncode(const Mat& block, int x, int y) {
     Mat minBlock;
     int shiftX = x;
     int shiftY = y;
@@ -168,12 +174,11 @@ void Predictor::findBestBlockAndEncode(const Mat& block, int x, int y) {
                 shiftY = shifts[i][1] * j;
             }
             else{
-              //  int sumDiff = sum(difference);
                 if (sum == 0){
                     shiftX = shifts[i][0] * j;
                     shiftY = shifts[i][1] * j;
                     encodeBlock(difference, shiftX, shiftY, true);
-                    return;
+                    return difference;
                 }
 
                 if (sum < sumMinBlock){
@@ -187,14 +192,29 @@ void Predictor::findBestBlockAndEncode(const Mat& block, int x, int y) {
     }
 
     encodeBlock(minBlock, shiftX, shiftY, false);
+    if (shift != 0){
+        Mat prevBlock = lastFrame(Rect(shiftX + x, shiftY + y, newBlockSize, newBlockSize));
+        for (int k = 0; k < newBlockSize; ++k) {
+            for (int l = 0; l < newBlockSize; ++l) {
+                if (block.channels() != 1){
+                    minBlock.ptr<Vec3i>(k)[l][0] += prevBlock.ptr<Vec3b>(k)[l][0];;
+                    minBlock.ptr<Vec3i>(k)[l][1] += prevBlock.ptr<Vec3b>(k)[l][1];;
+                    minBlock.ptr<Vec3i>(k)[l][2] += prevBlock.ptr<Vec3b>(k)[l][2];;
+
+                }else{
+                    minBlock.ptr<int>(k)[l] += prevBlock.ptr<uchar>(k)[l];
+                }
+            }
+        }
+    }
+    return minBlock;
 }
 
-void Predictor::encodeBlock(const Mat& block, int x, int y, bool sameBlock) {
+void Predictor::encodeBlock(Mat& block, int x, int y, bool sameBlock) {
     if (sameBlock){ // se o bloco for exatemente igual ao bloco do frame anterior
         golomb.encode(-1 * (ray + 1));
         golomb.encode(x);
         golomb.encode(y);
-        cout << "s" <<endl;
         return;
     }
 
@@ -206,7 +226,7 @@ void Predictor::encodeBlock(const Mat& block, int x, int y, bool sameBlock) {
     encodeFrame(block);
 }
 
-void Predictor::encodeFrame(const Mat &frame) {
+void Predictor::encodeFrame(Mat &frame) {
     int channels = frame.channels();
     int e, p, v;
     bool signedIntMat = frame.type() == 4 || frame.type() == 20;
@@ -218,21 +238,35 @@ void Predictor::encodeFrame(const Mat &frame) {
                     p = getPredictValor(frame, -1, i, j);
                     if (signedIntMat){
                         v = frame.ptr<int>(i)[j];
+                        e = v - p;
+                        e >>= shift;
+                        golomb.encode(e);
+                        frame.ptr<int>(i)[j] = p + (e << shift);
                     }
                     else{
                         v = frame.ptr<uchar>(i)[j];
+                        e = v - p;
+                        e >>= shift;
+                        golomb.encode(e);
+                        frame.ptr<uchar>(i)[j] = p + (e << shift);
                     }
 
                 }else{
                     p = getPredictValor(frame, k, i, j);
                     if (signedIntMat){
                         v = frame.ptr<Vec3i>(i)[j][k];
+                        e = v - p;
+                        e >>= shift;
+                        golomb.encode(e);
+                        frame.ptr<Vec3i>(i)[j][k] = p + (e << shift);
                     }else{
                         v = frame.ptr<Vec3b>(i)[j][k];
+                        e = v - p;
+                        e >>= shift;
+                        golomb.encode(e);
+                        frame.ptr<Vec3b>(i)[j][k] = p + (e << shift);
                     }
                 };
-                e = v - p;
-                golomb.encode(e);
             }
         }
     }
@@ -257,7 +291,7 @@ int Predictor::getPredictValor(const Mat& frame, int channel, int line, int col)
             c = line > 0 and col > 0 ? frame.ptr<Vec3i>(line - 1)[col - 1][channel] : 0;
         }
     }else{
-        if(channel == -1){ //o frame tem apenas um canal 422,420
+        if(channel == -1){ //o frame tem apenas um canal, por ex: 422,420
             a = col == 0 ? 0 : frame.ptr<uchar>(line)[col - 1];
             b = line == 0 ? 0 : frame.ptr<uchar>(line - 1)[col];
             c = line > 0 and col > 0 ? frame.ptr<uchar>(line - 1)[col - 1] : 0;
@@ -339,10 +373,10 @@ Mat Predictor::decodeInter(int rows, int cols, int channels) {
         for (int j = 0; j < cols; ++j) {
             for (int c = 0; c < channels; ++c) {
                 if (channels != 1){
-                    frame.ptr<Vec3b>(i)[j][c] = getPredictValor(frame,c, i, j) + golomb.decode();
+                    frame.ptr<Vec3b>(i)[j][c] = getPredictValor(frame,c, i, j) + (golomb.decode() << shift);
                 }
                 else{
-                    frame.ptr<uchar>(i)[j] = getPredictValor(frame, -1, i, j) + golomb.decode();
+                    frame.ptr<uchar>(i)[j] = getPredictValor(frame, -1, i, j) + (golomb.decode() << shift);
                 }
             }
         }
@@ -405,6 +439,7 @@ void Predictor::decodeBlock(Mat& frame, int x, int y, int size) {
         golomb.setM(nextM);
     }
 
+    // bloco do frame anterior
     Mat block = lastFrame(Rect(x + shiftX, y + shiftY, size, size));
     Mat diffBlock;
     if (frame.channels() != 1){
@@ -421,11 +456,11 @@ void Predictor::decodeBlock(Mat& frame, int x, int y, int size) {
             if (!isSameBlock){
                 for (int c = 0; c < channels; ++c) {
                     if (channels != 1){
-                        int diff = getPredictValor(diffBlock, c, i, j) + golomb.decode();
+                        int diff = getPredictValor(diffBlock, c, i, j) + (golomb.decode() << shift);
                         diffBlock.ptr<Vec3i>(i)[j][c] = diff;
                         frame.ptr<Vec3b>(Y)[X][c] = diff + block.ptr<Vec3b>(i)[j][c];
                     }else{
-                        int diff = getPredictValor(diffBlock, -1, i, j) + golomb.decode();
+                        int diff = getPredictValor(diffBlock, -1, i, j) + (golomb.decode() << shift);
                         diffBlock.ptr<int>(i)[j] = diff;
                         frame.ptr<uchar>(Y)[X] = diff + block.ptr<uchar>(i)[j];
                     }
@@ -434,33 +469,13 @@ void Predictor::decodeBlock(Mat& frame, int x, int y, int size) {
                 if (channels == 1){
                     frame.ptr<uchar>(Y)[X] = block.ptr<uchar>(i)[j];
                 }else{
-                    frame.ptr<Vec3b>(Y)[X][0] = getValidPixelValue(block.ptr<Vec3b>(i)[j][0]);
-                    frame.ptr<Vec3b>(Y)[X][1] = getValidPixelValue(block.ptr<Vec3b>(i)[j][1]);
-                    frame.ptr<Vec3b>(Y)[X][2] = getValidPixelValue(block.ptr<Vec3b>(i)[j][2]);
+                    frame.ptr<Vec3b>(Y)[X][0] = block.ptr<Vec3b>(i)[j][0];
+                    frame.ptr<Vec3b>(Y)[X][1] = block.ptr<Vec3b>(i)[j][1];
+                    frame.ptr<Vec3b>(Y)[X][2] = block.ptr<Vec3b>(i)[j][2];
                 }
             }
         }
     }
-}
-
-int Predictor::sum(const Mat &frame) {
-     int total = 0;
-     int v = 0;
-     int channels = frame.channels();
-     for (int i = 0; i < frame.rows; ++i) {
-         for (int j = 0; j < frame.cols; ++j) {
-             for (int k = 0; k < channels; ++k) {
-                 if (frame.channels() == 1){
-                     v = frame.ptr<int>(i)[j];
-                 }
-                 else {
-                     v = frame.ptr<Vec3i>(i)[j][k];
-                 }
-                 total += abs(v);
-             }
-         }
-     }
-    return total;
 }
 
 int Predictor::getBestMifUsePredictor(const Mat &frame) {
@@ -488,6 +503,9 @@ int Predictor::getBestMifUsePredictor(const Mat &frame) {
                 };
 
                 e = v - p;
+                if (shift != 0)
+                    e >>= shift;
+
                 if (e < 0){
                     e = -e * 2 - 1;
                 }else{
@@ -522,13 +540,4 @@ int Predictor::mediaFrame(const Mat &frame){
         }
     }
     return total / (frame.rows * frame.cols * frame.channels());
-}
-
-int Predictor::getValidPixelValue(int val) {
-    if (val < 0)
-        return 0;
-
-    if (val > 255)
-        return 255;
-    return val;
 }
