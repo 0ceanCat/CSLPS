@@ -21,7 +21,8 @@ void Predictor::encodeVideo(const string& videoPath, Format format) {
     golomb.encode(frame.rows);
     golomb.encode(frame.cols);
     golomb.encode(frame.channels());
-    golomb.encode((int) video.get(CAP_PROP_FRAME_COUNT));
+   // golomb.encode((int) video.get(CAP_PROP_FRAME_COUNT));
+    golomb.encode(10);
     golomb.encode((int) video.get(CAP_PROP_FPS));
     golomb.encode(format);
 
@@ -41,8 +42,9 @@ void Predictor::encodeVideo(const string& videoPath, Format format) {
         }
 
         video.read(frame);
-
         cout << "frame " << f++ << " encoded" << endl;
+        if (f == 11)
+            break;
     }
     cout << "encode finished" << endl;
 }
@@ -63,7 +65,7 @@ void Predictor::encode(Mat& frame) {
     }
 
     bitsLastFrame = bits;
-    lastFrame = frame;
+    frame.copyTo(lastFrame);
 }
 
 
@@ -483,9 +485,9 @@ void Predictor::decodeBlock(Mat& frame, int x, int y, int size) {
                 if (channels == 1){
                     frame.ptr<uchar>(Y)[X] = block.ptr<uchar>(i)[j];
                 }else{
-                    frame.ptr<Vec3b>(Y)[X][0] = block.ptr<Vec3b>(i)[j][0];
-                    frame.ptr<Vec3b>(Y)[X][1] = block.ptr<Vec3b>(i)[j][1];
-                    frame.ptr<Vec3b>(Y)[X][2] = block.ptr<Vec3b>(i)[j][2];
+                    frame.ptr<Vec3b>(Y)[X][0] = getValidPixelValue(block.ptr<Vec3b>(i)[j][0]);
+                    frame.ptr<Vec3b>(Y)[X][1] = getValidPixelValue(block.ptr<Vec3b>(i)[j][1]);
+                    frame.ptr<Vec3b>(Y)[X][2] = getValidPixelValue(block.ptr<Vec3b>(i)[j][2]);
                 }
             }
         }
@@ -518,4 +520,13 @@ int Predictor::mediaFrame(const Mat &frame){
         }
     }
     return total / (frame.rows * frame.cols * frame.channels());
+}
+
+int Predictor::getValidPixelValue(int val) {
+    if (val < 0)
+        return 0;
+
+    if (val > 255)
+        return 255;
+    return val;
 }

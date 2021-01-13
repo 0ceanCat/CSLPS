@@ -4,11 +4,11 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "D:/Universidade/3ano/CLP/project4/source/BitInputStream.cpp" "D:/Universidade/3ano/CLP/project4/cmake-build-debug/CMakeFiles/project4.dir/source/BitInputStream.cpp.obj"
-  "D:/Universidade/3ano/CLP/project4/source/BitOutputStream.cpp" "D:/Universidade/3ano/CLP/project4/cmake-build-debug/CMakeFiles/project4.dir/source/BitOutputStream.cpp.obj"
-  "D:/Universidade/3ano/CLP/project4/source/Golomb.cpp" "D:/Universidade/3ano/CLP/project4/cmake-build-debug/CMakeFiles/project4.dir/source/Golomb.cpp.obj"
-  "D:/Universidade/3ano/CLP/project4/source/Predictor.cpp" "D:/Universidade/3ano/CLP/project4/cmake-build-debug/CMakeFiles/project4.dir/source/Predictor.cpp.obj"
-  "D:/Universidade/3ano/CLP/project4/source/main.cpp" "D:/Universidade/3ano/CLP/project4/cmake-build-debug/CMakeFiles/project4.dir/source/main.cpp.obj"
+  "D:/Universidade/3ano/CLP/CSLPS/projeto5/source/BitInputStream.cpp" "D:/Universidade/3ano/CLP/CSLPS/projeto5/cmake-build-debug/CMakeFiles/project4.dir/source/BitInputStream.cpp.obj"
+  "D:/Universidade/3ano/CLP/CSLPS/projeto5/source/BitOutputStream.cpp" "D:/Universidade/3ano/CLP/CSLPS/projeto5/cmake-build-debug/CMakeFiles/project4.dir/source/BitOutputStream.cpp.obj"
+  "D:/Universidade/3ano/CLP/CSLPS/projeto5/source/Golomb.cpp" "D:/Universidade/3ano/CLP/CSLPS/projeto5/cmake-build-debug/CMakeFiles/project4.dir/source/Golomb.cpp.obj"
+  "D:/Universidade/3ano/CLP/CSLPS/projeto5/source/Predictor.cpp" "D:/Universidade/3ano/CLP/CSLPS/projeto5/cmake-build-debug/CMakeFiles/project4.dir/source/Predictor.cpp.obj"
+  "D:/Universidade/3ano/CLP/CSLPS/projeto5/source/main.cpp" "D:/Universidade/3ano/CLP/CSLPS/projeto5/cmake-build-debug/CMakeFiles/project4.dir/source/main.cpp.obj"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 

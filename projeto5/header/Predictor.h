@@ -6,7 +6,6 @@
 #define PROJECT4_PREDICTOR_H
 #include "Golomb.h"
 #include "opencv2/opencv.hpp"
-#include "BGRConverter.h"
 #include "YUV420Converter.h"
 #include "YUV422Converter.h"
 #include "YUV444Converter.h"
@@ -22,7 +21,6 @@ public:
         this->ray = ray;
         this->shift = shift;
         this->blockSize = blockSize;
-        this->convs.push_back(new BGRConverter);
         this->convs.push_back(new YUV420Converter);
         this->convs.push_back(new YUV422Converter);
         this->convs.push_back(new YUV444Converter);
@@ -52,6 +50,7 @@ private:
     Mat decodeIntra(int rows, int cols, int channels);
     void decodeBlock(Mat& frame, int x, int y, int size);
     int getPredictValor(const Mat& frame, int channel, int line, int col) const;
+    int getValidPixelValue(int val);
 };
 
 #endif //PROJECT4_PREDICTOR_H
