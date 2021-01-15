@@ -25,7 +25,7 @@ public:
         this->convs.push_back(new YUV422Converter);
         this->convs.push_back(new YUV444Converter);
     };
-    void encodeVideo(const string& videoPath, Format format);
+    void encodeVideo(const string& videoPath, Format format=BGR);
     void decodeVideo();
     void flip();
 private:
@@ -40,17 +40,17 @@ private:
     int blockSize;
     int shifts[9][2] = {{0, 0}, {1, 1}, {1, -1}, {-1, 1}, {-1, -1}, {0, 1}, {0, -1}, {1, 0}, {-1, 0}};
     int mediaFrame(const Mat& frame);
+    int getBestMifUsePredictor(const Mat& frame);
     void encode(Mat& frame);
     void encodeInter(Mat& frame);
     void encodeIntra(Mat& frame);
     void encodeFrame(Mat &frame);
     Mat findBestBlockAndEncode(const Mat& frame, int x, int y);
-    void encodeBlock(Mat& block, int x, int y, bool sameBlock);
+    void encodeBlock(Mat& frame, int x, int y, bool sameBlock);
     Mat decodeInter(int rows, int cols, int channels);
     Mat decodeIntra(int rows, int cols, int channels);
     void decodeBlock(Mat& frame, int x, int y, int size);
     int getPredictValor(const Mat& frame, int channel, int line, int col) const;
-    int getValidPixelValue(int val);
 };
 
 #endif //PROJECT4_PREDICTOR_H

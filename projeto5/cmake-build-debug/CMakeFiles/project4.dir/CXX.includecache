@@ -6,65 +6,69 @@
 
 #IncludeRegexTransform: 
 
-D:/Universidade/3ano/CLP/CSLPS/projeto5/header/BitInputStream.h
+D:/Universidade/3ano/CLP/project4/header/BitInputStream.h
 fstream
 -
 string
-D:/Universidade/3ano/CLP/CSLPS/projeto5/header/string
+D:/Universidade/3ano/CLP/project4/header/string
 
-D:/Universidade/3ano/CLP/CSLPS/projeto5/header/BitOutputStream.h
+D:/Universidade/3ano/CLP/project4/header/BitOutputStream.h
 fstream
 -
 string
-D:/Universidade/3ano/CLP/CSLPS/projeto5/header/string
+D:/Universidade/3ano/CLP/project4/header/string
 
-D:/Universidade/3ano/CLP/CSLPS/projeto5/header/Converter.h
+D:/Universidade/3ano/CLP/project4/header/Converter.h
 opencv2/opencv.hpp
-D:/Universidade/3ano/CLP/CSLPS/projeto5/header/opencv2/opencv.hpp
+D:/Universidade/3ano/CLP/project4/header/opencv2/opencv.hpp
 
-D:/Universidade/3ano/CLP/CSLPS/projeto5/header/Format.h
+D:/Universidade/3ano/CLP/project4/header/Format.h
 
-D:/Universidade/3ano/CLP/CSLPS/projeto5/header/Golomb.h
+D:/Universidade/3ano/CLP/project4/header/Golomb.h
 string
-D:/Universidade/3ano/CLP/CSLPS/projeto5/header/string
+D:/Universidade/3ano/CLP/project4/header/string
 BitInputStream.h
-D:/Universidade/3ano/CLP/CSLPS/projeto5/header/BitInputStream.h
+D:/Universidade/3ano/CLP/project4/header/BitInputStream.h
 BitOutputStream.h
-D:/Universidade/3ano/CLP/CSLPS/projeto5/header/BitOutputStream.h
+D:/Universidade/3ano/CLP/project4/header/BitOutputStream.h
 vector
-D:/Universidade/3ano/CLP/CSLPS/projeto5/header/vector
+D:/Universidade/3ano/CLP/project4/header/vector
 math.h
-D:/Universidade/3ano/CLP/CSLPS/projeto5/header/math.h
+D:/Universidade/3ano/CLP/project4/header/math.h
 
-D:/Universidade/3ano/CLP/CSLPS/projeto5/header/Predictor.h
+D:/Universidade/3ano/CLP/project4/header/Predictor.h
 Golomb.h
-D:/Universidade/3ano/CLP/CSLPS/projeto5/header/Golomb.h
+D:/Universidade/3ano/CLP/project4/header/Golomb.h
 opencv2/opencv.hpp
-D:/Universidade/3ano/CLP/CSLPS/projeto5/header/opencv2/opencv.hpp
+D:/Universidade/3ano/CLP/project4/header/opencv2/opencv.hpp
 YUV420Converter.h
-D:/Universidade/3ano/CLP/CSLPS/projeto5/header/YUV420Converter.h
+D:/Universidade/3ano/CLP/project4/header/YUV420Converter.h
 YUV422Converter.h
-D:/Universidade/3ano/CLP/CSLPS/projeto5/header/YUV422Converter.h
+D:/Universidade/3ano/CLP/project4/header/YUV422Converter.h
 YUV444Converter.h
-D:/Universidade/3ano/CLP/CSLPS/projeto5/header/YUV444Converter.h
+D:/Universidade/3ano/CLP/project4/header/YUV444Converter.h
 Format.h
-D:/Universidade/3ano/CLP/CSLPS/projeto5/header/Format.h
+D:/Universidade/3ano/CLP/project4/header/Format.h
 
-D:/Universidade/3ano/CLP/CSLPS/projeto5/header/YUV420Converter.h
+D:/Universidade/3ano/CLP/project4/header/YUV420Converter.h
 Converter.h
-D:/Universidade/3ano/CLP/CSLPS/projeto5/header/Converter.h
+D:/Universidade/3ano/CLP/project4/header/Converter.h
 
-D:/Universidade/3ano/CLP/CSLPS/projeto5/header/YUV422Converter.h
+D:/Universidade/3ano/CLP/project4/header/YUV422Converter.h
 Converter.h
-D:/Universidade/3ano/CLP/CSLPS/projeto5/header/Converter.h
+D:/Universidade/3ano/CLP/project4/header/Converter.h
 
-D:/Universidade/3ano/CLP/CSLPS/projeto5/header/YUV444Converter.h
+D:/Universidade/3ano/CLP/project4/header/YUV444Converter.h
 Converter.h
-D:/Universidade/3ano/CLP/CSLPS/projeto5/header/Converter.h
+D:/Universidade/3ano/CLP/project4/header/Converter.h
 
-D:/Universidade/3ano/CLP/CSLPS/projeto5/source/Predictor.cpp
+D:/Universidade/3ano/CLP/project4/source/main.cpp
+iostream
+-
+sysinfoapi.h
+-
 ../header/Predictor.h
-D:/Universidade/3ano/CLP/CSLPS/projeto5/header/Predictor.h
+D:/Universidade/3ano/CLP/project4/header/Predictor.h
 
 D:/openCv/opencv/build2/cv_cpu_config.h
 

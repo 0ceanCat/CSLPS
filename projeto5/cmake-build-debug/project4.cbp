@@ -5,21 +5,21 @@
 		<Option title="project4"/>
 		<Option makefile_is_custom="1"/>
 		<Option compiler="gcc"/>
-		<Option virtualFolders="CMake Files\;CMake Files\..\;CMake Files\..\..\;CMake Files\..\..\..\;CMake Files\..\..\..\..\;CMake Files\..\..\..\..\..\;CMake Files\..\..\..\..\..\openCv\;CMake Files\..\..\..\..\..\openCv\opencv\;CMake Files\..\..\..\..\..\openCv\opencv\build2\;"/>
+		<Option virtualFolders="CMake Files\;CMake Files\..\;CMake Files\..\..\;CMake Files\..\..\..\;CMake Files\..\..\..\..\;CMake Files\..\..\..\..\openCv\;CMake Files\..\..\..\..\openCv\opencv\;CMake Files\..\..\..\..\openCv\opencv\build2\;"/>
 		<Build>
 			<Target title="all">
-				<Option working_dir="D:/Universidade/3ano/CLP/CSLPS/projeto5/cmake-build-debug"/>
+				<Option working_dir="D:/Universidade/3ano/CLP/project4/cmake-build-debug"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="D:/openCv/mingw64/bin/mingw32-make.exe -f &quot;D:/Universidade/3ano/CLP/CSLPS/projeto5/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
-					<CompileFile command="D:/openCv/mingw64/bin/mingw32-make.exe -f &quot;D:/Universidade/3ano/CLP/CSLPS/projeto5/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="D:/openCv/mingw64/bin/mingw32-make.exe -f &quot;D:/Universidade/3ano/CLP/CSLPS/projeto5/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="D:/openCv/mingw64/bin/mingw32-make.exe -f &quot;D:/Universidade/3ano/CLP/CSLPS/projeto5/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="D:/openCv/mingw64/bin/mingw32-make.exe -f &quot;D:/Universidade/3ano/CLP/project4/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="D:/openCv/mingw64/bin/mingw32-make.exe -f &quot;D:/Universidade/3ano/CLP/project4/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="D:/openCv/mingw64/bin/mingw32-make.exe -f &quot;D:/Universidade/3ano/CLP/project4/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="D:/openCv/mingw64/bin/mingw32-make.exe -f &quot;D:/Universidade/3ano/CLP/project4/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="project4">
-				<Option output="D:/Universidade/3ano/CLP/CSLPS/projeto5/cmake-build-debug/project4.exe" prefix_auto="0" extension_auto="0"/>
-				<Option working_dir="D:/Universidade/3ano/CLP/CSLPS/projeto5/cmake-build-debug"/>
+				<Option output="D:/Universidade/3ano/CLP/project4/cmake-build-debug/project4.exe" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="D:/Universidade/3ano/CLP/project4/cmake-build-debug"/>
 				<Option object_output="./"/>
 				<Option type="1"/>
 				<Option compiler="gcc"/>
@@ -50,15 +50,15 @@
 					<Add directory="D:/openCv/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/8.1.0/../../../../x86_64-w64-mingw32/include"/>
 				</Compiler>
 				<MakeCommands>
-					<Build command="D:/openCv/mingw64/bin/mingw32-make.exe -f &quot;D:/Universidade/3ano/CLP/CSLPS/projeto5/cmake-build-debug/Makefile&quot;  VERBOSE=1 project4"/>
-					<CompileFile command="D:/openCv/mingw64/bin/mingw32-make.exe -f &quot;D:/Universidade/3ano/CLP/CSLPS/projeto5/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="D:/openCv/mingw64/bin/mingw32-make.exe -f &quot;D:/Universidade/3ano/CLP/CSLPS/projeto5/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="D:/openCv/mingw64/bin/mingw32-make.exe -f &quot;D:/Universidade/3ano/CLP/CSLPS/projeto5/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="D:/openCv/mingw64/bin/mingw32-make.exe -f &quot;D:/Universidade/3ano/CLP/project4/cmake-build-debug/Makefile&quot;  VERBOSE=1 project4"/>
+					<CompileFile command="D:/openCv/mingw64/bin/mingw32-make.exe -f &quot;D:/Universidade/3ano/CLP/project4/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="D:/openCv/mingw64/bin/mingw32-make.exe -f &quot;D:/Universidade/3ano/CLP/project4/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="D:/openCv/mingw64/bin/mingw32-make.exe -f &quot;D:/Universidade/3ano/CLP/project4/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="project4/fast">
-				<Option output="D:/Universidade/3ano/CLP/CSLPS/projeto5/cmake-build-debug/project4.exe" prefix_auto="0" extension_auto="0"/>
-				<Option working_dir="D:/Universidade/3ano/CLP/CSLPS/projeto5/cmake-build-debug"/>
+				<Option output="D:/Universidade/3ano/CLP/project4/cmake-build-debug/project4.exe" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="D:/Universidade/3ano/CLP/project4/cmake-build-debug"/>
 				<Option object_output="./"/>
 				<Option type="1"/>
 				<Option compiler="gcc"/>
@@ -89,71 +89,71 @@
 					<Add directory="D:/openCv/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/8.1.0/../../../../x86_64-w64-mingw32/include"/>
 				</Compiler>
 				<MakeCommands>
-					<Build command="D:/openCv/mingw64/bin/mingw32-make.exe -f &quot;D:/Universidade/3ano/CLP/CSLPS/projeto5/cmake-build-debug/Makefile&quot;  VERBOSE=1 project4/fast"/>
-					<CompileFile command="D:/openCv/mingw64/bin/mingw32-make.exe -f &quot;D:/Universidade/3ano/CLP/CSLPS/projeto5/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="D:/openCv/mingw64/bin/mingw32-make.exe -f &quot;D:/Universidade/3ano/CLP/CSLPS/projeto5/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="D:/openCv/mingw64/bin/mingw32-make.exe -f &quot;D:/Universidade/3ano/CLP/CSLPS/projeto5/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="D:/openCv/mingw64/bin/mingw32-make.exe -f &quot;D:/Universidade/3ano/CLP/project4/cmake-build-debug/Makefile&quot;  VERBOSE=1 project4/fast"/>
+					<CompileFile command="D:/openCv/mingw64/bin/mingw32-make.exe -f &quot;D:/Universidade/3ano/CLP/project4/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="D:/openCv/mingw64/bin/mingw32-make.exe -f &quot;D:/Universidade/3ano/CLP/project4/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="D:/openCv/mingw64/bin/mingw32-make.exe -f &quot;D:/Universidade/3ano/CLP/project4/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="edit_cache">
-				<Option working_dir="D:/Universidade/3ano/CLP/CSLPS/projeto5/cmake-build-debug"/>
+				<Option working_dir="D:/Universidade/3ano/CLP/project4/cmake-build-debug"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="D:/openCv/mingw64/bin/mingw32-make.exe -f &quot;D:/Universidade/3ano/CLP/CSLPS/projeto5/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
-					<CompileFile command="D:/openCv/mingw64/bin/mingw32-make.exe -f &quot;D:/Universidade/3ano/CLP/CSLPS/projeto5/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="D:/openCv/mingw64/bin/mingw32-make.exe -f &quot;D:/Universidade/3ano/CLP/CSLPS/projeto5/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="D:/openCv/mingw64/bin/mingw32-make.exe -f &quot;D:/Universidade/3ano/CLP/CSLPS/projeto5/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="D:/openCv/mingw64/bin/mingw32-make.exe -f &quot;D:/Universidade/3ano/CLP/project4/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="D:/openCv/mingw64/bin/mingw32-make.exe -f &quot;D:/Universidade/3ano/CLP/project4/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="D:/openCv/mingw64/bin/mingw32-make.exe -f &quot;D:/Universidade/3ano/CLP/project4/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="D:/openCv/mingw64/bin/mingw32-make.exe -f &quot;D:/Universidade/3ano/CLP/project4/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="rebuild_cache">
-				<Option working_dir="D:/Universidade/3ano/CLP/CSLPS/projeto5/cmake-build-debug"/>
+				<Option working_dir="D:/Universidade/3ano/CLP/project4/cmake-build-debug"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="D:/openCv/mingw64/bin/mingw32-make.exe -f &quot;D:/Universidade/3ano/CLP/CSLPS/projeto5/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
-					<CompileFile command="D:/openCv/mingw64/bin/mingw32-make.exe -f &quot;D:/Universidade/3ano/CLP/CSLPS/projeto5/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="D:/openCv/mingw64/bin/mingw32-make.exe -f &quot;D:/Universidade/3ano/CLP/CSLPS/projeto5/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="D:/openCv/mingw64/bin/mingw32-make.exe -f &quot;D:/Universidade/3ano/CLP/CSLPS/projeto5/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="D:/openCv/mingw64/bin/mingw32-make.exe -f &quot;D:/Universidade/3ano/CLP/project4/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="D:/openCv/mingw64/bin/mingw32-make.exe -f &quot;D:/Universidade/3ano/CLP/project4/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="D:/openCv/mingw64/bin/mingw32-make.exe -f &quot;D:/Universidade/3ano/CLP/project4/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="D:/openCv/mingw64/bin/mingw32-make.exe -f &quot;D:/Universidade/3ano/CLP/project4/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 		</Build>
-		<Unit filename="D:/Universidade/3ano/CLP/CSLPS/projeto5/header/Converter.h">
+		<Unit filename="D:/Universidade/3ano/CLP/project4/header/Converter.h">
 			<Option target="project4"/>
 		</Unit>
-		<Unit filename="D:/Universidade/3ano/CLP/CSLPS/projeto5/header/YUV420Converter.h">
+		<Unit filename="D:/Universidade/3ano/CLP/project4/header/YUV420Converter.h">
 			<Option target="project4"/>
 		</Unit>
-		<Unit filename="D:/Universidade/3ano/CLP/CSLPS/projeto5/header/YUV422Converter.h">
+		<Unit filename="D:/Universidade/3ano/CLP/project4/header/YUV422Converter.h">
 			<Option target="project4"/>
 		</Unit>
-		<Unit filename="D:/Universidade/3ano/CLP/CSLPS/projeto5/header/YUV444Converter.h">
+		<Unit filename="D:/Universidade/3ano/CLP/project4/header/YUV444Converter.h">
 			<Option target="project4"/>
 		</Unit>
-		<Unit filename="D:/Universidade/3ano/CLP/CSLPS/projeto5/source/BitInputStream.cpp">
+		<Unit filename="D:/Universidade/3ano/CLP/project4/source/BitInputStream.cpp">
 			<Option target="project4"/>
 		</Unit>
-		<Unit filename="D:/Universidade/3ano/CLP/CSLPS/projeto5/source/BitOutputStream.cpp">
+		<Unit filename="D:/Universidade/3ano/CLP/project4/source/BitOutputStream.cpp">
 			<Option target="project4"/>
 		</Unit>
-		<Unit filename="D:/Universidade/3ano/CLP/CSLPS/projeto5/source/Golomb.cpp">
+		<Unit filename="D:/Universidade/3ano/CLP/project4/source/Golomb.cpp">
 			<Option target="project4"/>
 		</Unit>
-		<Unit filename="D:/Universidade/3ano/CLP/CSLPS/projeto5/source/Predictor.cpp">
+		<Unit filename="D:/Universidade/3ano/CLP/project4/source/Predictor.cpp">
 			<Option target="project4"/>
 		</Unit>
-		<Unit filename="D:/Universidade/3ano/CLP/CSLPS/projeto5/source/main.cpp">
+		<Unit filename="D:/Universidade/3ano/CLP/project4/source/main.cpp">
 			<Option target="project4"/>
 		</Unit>
-		<Unit filename="D:/Universidade/3ano/CLP/CSLPS/projeto5/CMakeLists.txt">
+		<Unit filename="D:/Universidade/3ano/CLP/project4/CMakeLists.txt">
 			<Option virtualFolder="CMake Files\"/>
 		</Unit>
-		<Unit filename="D:/Universidade/3ano/CLP/CSLPS/projeto5/../../../../../openCv/opencv/build2/OpenCVConfig-version.cmake">
-			<Option virtualFolder="CMake Files\..\..\..\..\..\openCv\opencv\build2\"/>
+		<Unit filename="D:/Universidade/3ano/CLP/project4/../../../../openCv/opencv/build2/OpenCVConfig-version.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\openCv\opencv\build2\"/>
 		</Unit>
-		<Unit filename="D:/Universidade/3ano/CLP/CSLPS/projeto5/../../../../../openCv/opencv/build2/OpenCVConfig.cmake">
-			<Option virtualFolder="CMake Files\..\..\..\..\..\openCv\opencv\build2\"/>
+		<Unit filename="D:/Universidade/3ano/CLP/project4/../../../../openCv/opencv/build2/OpenCVConfig.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\openCv\opencv\build2\"/>
 		</Unit>
-		<Unit filename="D:/Universidade/3ano/CLP/CSLPS/projeto5/../../../../../openCv/opencv/build2/OpenCVModules.cmake">
-			<Option virtualFolder="CMake Files\..\..\..\..\..\openCv\opencv\build2\"/>
+		<Unit filename="D:/Universidade/3ano/CLP/project4/../../../../openCv/opencv/build2/OpenCVModules.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\openCv\opencv\build2\"/>
 		</Unit>
 	</Project>
 </CodeBlocks_project_file>
