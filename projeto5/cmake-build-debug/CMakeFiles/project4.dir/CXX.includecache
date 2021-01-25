@@ -6,6 +6,10 @@
 
 #IncludeRegexTransform: 
 
+D:/Universidade/3ano/CLP/project4/header/BGRConverter.h
+Converter.h
+D:/Universidade/3ano/CLP/project4/header/Converter.h
+
 D:/Universidade/3ano/CLP/project4/header/BitInputStream.h
 fstream
 -
@@ -47,6 +51,8 @@ YUV422Converter.h
 D:/Universidade/3ano/CLP/project4/header/YUV422Converter.h
 YUV444Converter.h
 D:/Universidade/3ano/CLP/project4/header/YUV444Converter.h
+BGRConverter.h
+D:/Universidade/3ano/CLP/project4/header/BGRConverter.h
 Format.h
 D:/Universidade/3ano/CLP/project4/header/Format.h
 
@@ -62,11 +68,7 @@ D:/Universidade/3ano/CLP/project4/header/YUV444Converter.h
 Converter.h
 D:/Universidade/3ano/CLP/project4/header/Converter.h
 
-D:/Universidade/3ano/CLP/project4/source/main.cpp
-iostream
--
-sysinfoapi.h
--
+D:/Universidade/3ano/CLP/project4/source/Predictor.cpp
 ../header/Predictor.h
 D:/Universidade/3ano/CLP/project4/header/Predictor.h
 

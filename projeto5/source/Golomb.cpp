@@ -203,3 +203,13 @@ const int Golomb::changeToBestM(int media) {
         return 1;
     return (int) log2(media * fakeM) + 1;
 }
+
+void Golomb::close() {
+    if(output.isOpen()){
+        output.close();
+    }
+
+    if (input.isOpen()){
+        input.close();
+    }
+}

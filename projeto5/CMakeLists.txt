@@ -3,7 +3,7 @@ project(project4)
 
 set(CMAKE_CXX_STANDARD 14)
 add_executable(project4 source/main.cpp source/BitInputStream.cpp source/BitOutputStream.cpp source/Golomb.cpp source/Predictor.cpp header/Converter.h
-        header/YUV420Converter.h header/YUV422Converter.h header/YUV444Converter.h)
+        header/YUV420Converter.h header/YUV422Converter.h header/YUV444Converter.h header/BGRConverter.h)
 
 set(OpenCV_DIR D:\\openCv\\opencv\\build2)
 find_package(OpenCV REQUIRED)

@@ -2,10 +2,10 @@
 #define PROJECT4_FORMAT_H
 
 enum Format {
-    BGR = 0,
-    YUV420 = 1,
-    YUV422 = 2,
-    YUV444 = 3
+    YUV420 = 0,
+    YUV422 = 1,
+    YUV444 = 2,
+    BGR = 3
 };
 
 #endif

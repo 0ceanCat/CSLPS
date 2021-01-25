@@ -116,6 +116,9 @@
 				</MakeCommands>
 			</Target>
 		</Build>
+		<Unit filename="D:/Universidade/3ano/CLP/project4/header/BGRConverter.h">
+			<Option target="project4"/>
+		</Unit>
 		<Unit filename="D:/Universidade/3ano/CLP/project4/header/Converter.h">
 			<Option target="project4"/>
 		</Unit>

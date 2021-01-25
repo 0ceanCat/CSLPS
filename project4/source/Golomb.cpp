@@ -157,3 +157,49 @@ void Golomb::changeMode(int mode) {
 void Golomb::setM(int _m) {
     this->m = _m;
 }
+
+/**
+ * retorna o numero de bits que o {@param val} precisa
+ * @param val o numero que quer codificar
+ * @return numeo de bits
+ */
+int Golomb::countNecessaryBit(int val) {
+    int bits = 0;
+    if (val < 0){
+        val = -val * 2 - 1;
+    }else{
+        val = val * 2;
+    }
+
+    int q = val / fakeM;
+    int r = val - q * fakeM;
+
+    bits += q + 1;  // numero de um's + um zero
+
+    int b = log2(fakeM);
+    int rBits = b;
+
+    if (!isPowerOf2()){
+        b = ceil(log2(fakeM));
+        rBits = b - 1;
+        int t = (0x01 << b) - fakeM;
+        if (r >= t){
+            r = r + t;
+            rBits = b;
+        }
+    }
+
+    int numberOfbitsForR;
+    if (r == 0)
+        numberOfbitsForR = 1;
+    else
+        numberOfbitsForR = (int) log2(r) + 1;
+
+    return bits + (rBits - numberOfbitsForR);
+}
+
+const int Golomb::changeToBestM(int media) {
+    if (media == 0)
+        return 1;
+    return (int) log2(media * fakeM) + 1;
+}

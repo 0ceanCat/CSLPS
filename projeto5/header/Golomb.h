@@ -27,6 +27,8 @@ public:
     void setM(int m);
     int countNecessaryBit(int val);
     const int changeToBestM(int bits);
+
+    void close();
 };
 
 

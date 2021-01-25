@@ -13,6 +13,7 @@ CMakeFiles/project4.dir/source/Golomb.cpp.obj
  D:/Universidade/3ano/CLP/project4/header/Golomb.h
  D:/Universidade/3ano/CLP/project4/source/Golomb.cpp
 CMakeFiles/project4.dir/source/Predictor.cpp.obj
+ D:/Universidade/3ano/CLP/project4/header/BGRConverter.h
  D:/Universidade/3ano/CLP/project4/header/BitInputStream.h
  D:/Universidade/3ano/CLP/project4/header/BitOutputStream.h
  D:/Universidade/3ano/CLP/project4/header/Converter.h
@@ -122,6 +123,7 @@ CMakeFiles/project4.dir/source/Predictor.cpp.obj
  D:/openCv/opencv/sources/modules/video/include/opencv2/video/tracking.hpp
  D:/openCv/opencv/sources/modules/videoio/include/opencv2/videoio.hpp
 CMakeFiles/project4.dir/source/main.cpp.obj
+ D:/Universidade/3ano/CLP/project4/header/BGRConverter.h
  D:/Universidade/3ano/CLP/project4/header/BitInputStream.h
  D:/Universidade/3ano/CLP/project4/header/BitOutputStream.h
  D:/Universidade/3ano/CLP/project4/header/Converter.h

@@ -12,6 +12,7 @@ CMakeFiles/project4.dir/source/Golomb.cpp.obj: ../header/BitOutputStream.h
 CMakeFiles/project4.dir/source/Golomb.cpp.obj: ../header/Golomb.h
 CMakeFiles/project4.dir/source/Golomb.cpp.obj: ../source/Golomb.cpp
 
+CMakeFiles/project4.dir/source/Predictor.cpp.obj: ../header/BGRConverter.h
 CMakeFiles/project4.dir/source/Predictor.cpp.obj: ../header/BitInputStream.h
 CMakeFiles/project4.dir/source/Predictor.cpp.obj: ../header/BitOutputStream.h
 CMakeFiles/project4.dir/source/Predictor.cpp.obj: ../header/Converter.h
@@ -121,6 +122,7 @@ CMakeFiles/project4.dir/source/Predictor.cpp.obj: D:/openCv/opencv/sources/modul
 CMakeFiles/project4.dir/source/Predictor.cpp.obj: D:/openCv/opencv/sources/modules/video/include/opencv2/video/tracking.hpp
 CMakeFiles/project4.dir/source/Predictor.cpp.obj: D:/openCv/opencv/sources/modules/videoio/include/opencv2/videoio.hpp
 
+CMakeFiles/project4.dir/source/main.cpp.obj: ../header/BGRConverter.h
 CMakeFiles/project4.dir/source/main.cpp.obj: ../header/BitInputStream.h
 CMakeFiles/project4.dir/source/main.cpp.obj: ../header/BitOutputStream.h
 CMakeFiles/project4.dir/source/main.cpp.obj: ../header/Converter.h

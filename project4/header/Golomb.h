@@ -3,6 +3,7 @@
 #include "string"
 #include "BitInputStream.h"
 #include "BitOutputStream.h"
+#include "vector"
 #include "math.h"
 
 using namespace std;
@@ -10,6 +11,7 @@ using namespace std;
 class Golomb {
 private:
     int m;
+    int fakeM = 8;
     BitInputStream input;
     BitOutputStream output;
     string filepath;
@@ -23,7 +25,8 @@ public:
     void flip();
     void changeMode(int mode);
     void setM(int m);
-    int getM(){return this->m;};
+    int countNecessaryBit(int val);
+    const int changeToBestM(int bits);
 };
 
 

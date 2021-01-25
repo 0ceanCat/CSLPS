@@ -21,8 +21,8 @@ void Predictor::encodeVideo(const string& videoPath, Format format) {
     golomb.encode(frame.rows);
     golomb.encode(frame.cols);
     golomb.encode(frame.channels());
-    //golomb.encode((int) video.get(CAP_PROP_FRAME_COUNT));
-    golomb.encode(30);
+    golomb.encode((int) video.get(CAP_PROP_FRAME_COUNT));
+   // golomb.encode(30);
     golomb.encode((int) video.get(CAP_PROP_FPS));
     golomb.encode(format);
 
@@ -33,16 +33,15 @@ void Predictor::encodeVideo(const string& videoPath, Format format) {
             break;
         }
         if (f == 1){
-            encodeInter(frame);
+            encodeIntra(frame);
             lastFrame = frame;
         }else{
             frame = convs.at(format)->encode(frame);
             encode(frame);
         }
         video.read(frame);
-        cout << "frame " << f++ << " encoded" << endl;
-        if(f==31)
-            break;
+       // cout << "frame " << f++ << " encoded" << endl;
+        f++;
     }
     cout << "encode finished" << endl;
 }
@@ -53,20 +52,29 @@ void Predictor::encodeVideo(const string& videoPath, Format format) {
  * @param frame
  */
 void Predictor::encode(Mat& frame) {
-    int bits = golomb.countNecessaryBit(mediaFrame(frame));
-    if (bitsLastFrame != bits) {//houve uma mudanca da cena
-        encodeInter(frame);
+    if (mode == 0){
+        int bits = golomb.countNecessaryBit(mediaFrame(frame));
+        if (bitsLastFrame != bits) {//houve uma mudanca da cena
+            encodeIntra(frame);
+        }
+        else{
+            encodeInter(frame);
+        }
+
+        bitsLastFrame = bits;
+    }else{
+        if (mode == 1){
+            encodeIntra(frame);
+        }else{
+            encodeInter(frame);
+        }
     }
-    else{
-        encodeIntra(frame);
-    }
-    bitsLastFrame = bits;
-    frame.copyTo(lastFrame);
+
+    lastFrame = frame;
 }
 
 
-void Predictor::encodeInter(Mat& frame) {
-    cout << "Inter" << endl;
+void Predictor::encodeIntra(Mat& frame) {
     golomb.encode(0); //modo inter
     int bestM = getBestMifUsePredictor(frame);
     golomb.encode(bestM);
@@ -74,8 +82,7 @@ void Predictor::encodeInter(Mat& frame) {
     encodeFrame(frame);
 }
 
-void Predictor::encodeIntra(Mat &frame) {
-    cout << "Intra" << endl;
+void Predictor::encodeInter(Mat &frame) {
     golomb.encode(1); //modo intra
     bool rowsOk = frame.rows % blockSize == 0;
     bool colsOk = frame.cols % blockSize == 0;
@@ -342,10 +349,10 @@ void Predictor::decodeVideo() {
         bool inter = golomb.decode() == 0;
 
         if (inter) {
-            decoded = decodeInter(rows, cols, channels);
+            decoded = decodeIntra(rows, cols, channels);
         }
         else{
-            decoded = decodeIntra(rows, cols, channels);
+            decoded = decodeInter(rows, cols, channels);
         }
         lastFrame = decoded;
         const Mat &bgr = convs.at(format)->decode(decoded);
@@ -361,7 +368,7 @@ void Predictor::flip() {
     golomb.flip();
 }
 
-Mat Predictor::decodeInter(int rows, int cols, int channels) {
+Mat Predictor::decodeIntra(int rows, int cols, int channels) {
     Mat frame;
     if (channels == 3)
         frame = Mat::zeros(rows, cols, CV_8UC3);
@@ -386,7 +393,7 @@ Mat Predictor::decodeInter(int rows, int cols, int channels) {
     return frame;
 }
 
-Mat Predictor::decodeIntra(int rows, int cols, int channels){
+Mat Predictor::decodeInter(int rows, int cols, int channels){
     Mat frame;
     if (channels == 3)
         frame = Mat::zeros(rows, cols, CV_8UC3);
@@ -517,7 +524,7 @@ int Predictor::getBestMifUsePredictor(const Mat &frame) {
             }
         }
     }
-    return (total / (frame.rows * frame.cols * frame.channels())) + 1;
+    return (total / (frame.rows * frame.cols * frame.channels())) + 1;;
 }
 
 int Predictor::mediaFrame(const Mat &frame){
@@ -542,4 +549,8 @@ int Predictor::mediaFrame(const Mat &frame){
         }
     }
     return total / (frame.rows * frame.cols * frame.channels());
+}
+
+void Predictor::close() {
+    golomb.close();
 }
