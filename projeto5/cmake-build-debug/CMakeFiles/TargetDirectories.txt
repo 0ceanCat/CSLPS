@@ -1,3 +1,0 @@
-D:/Universidade/3ano/CLP/project4/cmake-build-debug/CMakeFiles/project4.dir
-D:/Universidade/3ano/CLP/project4/cmake-build-debug/CMakeFiles/edit_cache.dir
-D:/Universidade/3ano/CLP/project4/cmake-build-debug/CMakeFiles/rebuild_cache.dir
